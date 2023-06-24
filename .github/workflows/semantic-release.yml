@@ -5,46 +5,46 @@ on:
     branches:
       - master
     paths:
-    - 'modules/**'
+      - 'modules/**'
+
 permissions: write-all
 
 jobs:
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        id: checkout
         with:
           fetch-depth: 0
 
       - name: Execute Semantic Release Script
         id: semantic_script
         run: |
-            bash semantic-release.sh > script-env.txt
-            continue-on-error: true
-  
+          bash semantic-release.sh > script-env.txt
+
       - name: Load Semantic Release Script Output
         id: semantic_script_output
         run: |
-            echo "Script output:"
-            cat script-env.txt
-            echo "Loading environment variables..."
-            source script-env.txt
-  
+          echo "Script output:"
+          cat script-env.txt
+          echo "Loading environment variables..."
+          source script-env.txt
+
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         env:
-            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-            TAG_FORMAT: ${{ env.tag_format }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+          TAG_FORMAT: ${{ env.tag_format }}
         with:
-            tag_format: ${{ env.TAG_FORMAT }}
-            additional_packages: |
-                ['@semantic-release/changelog', '@semantic-release/git']
-            plugins: |
-                ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG'}], '@semantic-release/github', '@semantic-release/git']
-            branches: |
-                [
-                'master'
-                ]
+          tag_format: ${{ env.TAG_FORMAT }}
+          additional_packages: |
+            ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG'}], '@semantic-release/github', '@semantic-release/git']
+          branches: |
+            [
+              'master'
+            ]
