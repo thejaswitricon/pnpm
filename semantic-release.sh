@@ -26,4 +26,4 @@ sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" CHANG
 # Output the variables for further use in the workflow
 echo "has_tags=${has_tags}"
 echo "tag_format=${tag_format}"
-echo "version=${version}"
+# echo "version=${version}"
