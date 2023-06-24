@@ -49,16 +49,9 @@ jobs:
       - name: Add new version to changelog
         id: add_version_to_changelog
         run: |
-         if test "${{ steps.check_tags.outputs.has_tags }}" = "true"; then
-            version=$(git describe --tags --abbrev=0)
-         else
-            version="1.0.0"
-         fi
-      
           declare -A CHANGELOG_PATHS=(
             ["modules/aws/eks/eks-simple"]="modules/aws/eks/eks-simple/changelog.md"
             ["modules/aws/ecs/ecs-simple"]="modules/aws/ecs/ecs-simple/changelog.md"
-            # Add more directory-to-changelog mappings here as needed
           )
       
           CHANGED_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
