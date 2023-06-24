@@ -19,25 +19,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Get the name of the directory that was changed
-      - name: Get changed directories
-        id: changed_dirs
+      - name: Execute Semantic Release Script
+        id: semantic_script
         run: |
-          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
-
-      - name: Run semantic-release.sh
-        id: semantic_release_script
+            bash semantic-release.sh > script-env.txt
+            continue-on-error: true
+  
+      - name: Load Semantic Release Script Output
+        id: semantic_script_output
         run: |
-            chmod +x semantic-release.sh
-            source ./semantic-release.sh
+            echo "Script output:"
+            cat script-env.txt
+            echo "Loading environment variables..."
+            source script-env.txt
   
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
-        id: semantic
         env:
             GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+            TAG_FORMAT: ${{ env.tag_format }}
         with:
-            tag_format: '${{ steps.semantic_release_script.outputs.tag_format }}'
+            tag_format: ${{ env.TAG_FORMAT }}
             additional_packages: |
                 ['@semantic-release/changelog', '@semantic-release/git']
             plugins: |
@@ -46,18 +48,3 @@ jobs:
                 [
                 'master'
                 ]
-        
-      # Get the latest version tag
-      - name: Get latest version tag
-        run: |
-          version=$(git describe --tags --abbrev=0)
-          echo "::set-output name=version::$version"
-
-      - name: Semantic Release Output Summary
-        id: semantic_summary
-        run: |
-          echo "### Semantic Version = ${{ steps.semantic.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-        continue-on-error: true
