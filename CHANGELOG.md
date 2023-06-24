@@ -1,6 +1,16 @@
 # CHANGELOG
 
-## [1.0.2](https://github.com/thejaswitricon/pnpm/compare/v1.0.1...v1.0.2) (2023-06-24)
+## [1.0.3](https://github.com/thejaswitricon/pnpm/compare/v1.0.2...v1.0.3) (2023-06-24)
+
+
+### Bug Fixes
+
+* **root:** change in the ecs-simple module ([956e3e3](https://github.com/thejaswitricon/pnpm/commit/956e3e37024f8ba888d6f48725e68cb632644510))
+* **root:** change in the ecs-simple module ([5da6637](https://github.com/thejaswitricon/pnpm/commit/5da66371045afa74080cbde504893b933de39324))
+* **root:** change in the ecs-simple module ([f9e1ab0](https://github.com/thejaswitricon/pnpm/commit/f9e1ab067877287df96eb1e2f4abdcdffc466097))
+* **root:** change in the ecs-simple module ([f5873d4](https://github.com/thejaswitricon/pnpm/commit/f5873d4aed2cfcdc06875daf0d1a3bef4d8d5a3f))
+
+## [v1.0.2] 2023-06-24(https://github.com/thejaswitricon/pnpm/compare/v1.0.1...v1.0.2) (2023-06-24)
 
 
 ### Bug Fixes
