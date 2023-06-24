@@ -8,7 +8,7 @@ else
 fi
 
 # Get the name of the directory that was changed
-dirs=$(git diff-tree --no-commit-id --name-only -r "${GITHUB_SHA}" | awk -F/ '{print $0}' | sort -u)
+dirs="$(git diff-tree --no-commit-id --name-only -r "${GITHUB_SHA}" | awk -F/ '{print $0}' | sort -u)"
 
 # Update the tag format to include the name of the directory
 APP_NAME=$(echo "${dirs}" | awk '{print tolower($0)}')
