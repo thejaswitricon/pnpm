@@ -25,53 +25,27 @@ jobs:
         run: |
           echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
 
-      # Check if there are any tags available
-      - name: Check for tags
-        id: check_tags
-        run: |
-          if [[ -z $(git tag -l) ]]; then
-            echo "::set-output name=has_tags::false"
-          else
-            echo "::set-output name=has_tags::true"
-          fi
-
-      # Update the tag format to include the name of the directory
-      - name: Update tag format
-        id: update_tag_format
-        run: |
-          APP_NAME=$(echo "${{ steps.changed_dirs.outputs.dirs }}" | awk '{print tolower($0)}')
-          echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
-
-        # Add new version to changelog or set initial version if no tags are available
-      - name: Add new version to changelog
-        id: add_version_to_changelog
-        run: |
-            if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
-            version=$(git describe --tags --abbrev=0)
-            else
-            version="1.0.0"
-            echo "## Changelog" > CHANGELOG.md
-            fi
-            sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" CHANGELOG.md
-            
-      # https://github.com/marketplace/actions/semantic-release-action#usage
+          - name: Run semantic-release.sh
+          id: semantic_release_script
+          run: |
+            chmod +x semantic-release.sh
+            source ./semantic-release.sh
+  
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
-          additional_packages: |
-            ['@semantic-release/changelog', '@semantic-release/git']
-          plugins: |
-            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG'}], '@semantic-release/github', '@semantic-release/git']
-          # specify default branches to add support for the `main` branch
-          # which semantic-release doesn't have as a default yet.
-          branches: |
-            [
-              'master'
-            ]
+            tag_format: '${{ steps.semantic_release_script.outputs.tag_format }}'
+            additional_packages: |
+                ['@semantic-release/changelog', '@semantic-release/git']
+            plugins: |
+                ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG'}], '@semantic-release/github', '@semantic-release/git']
+            branches: |
+                [
+                'master'
+                ]
         
       # Get the latest version tag
       - name: Get latest version tag
