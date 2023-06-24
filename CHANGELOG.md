@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.0.1](https://github.com/thejaswitricon/pnpm/compare/v1.0.0...v1.0.1) (2023-06-24)
+
+
+### Bug Fixes
+
+* **root:** change in the ecs-simple module ([6871e38](https://github.com/thejaswitricon/pnpm/commit/6871e381d04b6473c8bfd56676b46fcc8c6dbfe1))
+
 # 1.0.0 (2023-06-24)
 
 
