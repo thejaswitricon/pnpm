@@ -49,11 +49,11 @@ jobs:
       - name: Add new version to changelog
         id: add_version_to_changelog
         run: |
-          if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
+         if test "${{ steps.check_tags.outputs.has_tags }}" = "true"; then
             version=$(git describe --tags --abbrev=0)
-          else
+         else
             version="1.0.0"
-          fi
+         fi
       
           declare -A CHANGELOG_PATHS=(
             ["modules/aws/eks/eks-simple"]="modules/aws/eks/eks-simple/changelog.md"
