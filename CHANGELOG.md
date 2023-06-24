@@ -1,5 +1,16 @@
 # CHANGELOG
 
+# [1.1.0](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules/index.js-v1.0.0...modules/aws/ecs/ecs-simple/modules/index.js-v1.1.0) (2023-06-24)
+
+
+### Features
+
+* **root:** change in the ecs-simple module ([c347ec2](https://github.com/thejaswitricon/pnpm/commit/c347ec2f975832a87ea16a36b1b6c8a25af1eda5))
+* **root:** change in the ecs-simple module ([4d45f9b](https://github.com/thejaswitricon/pnpm/commit/4d45f9bd5ecaf2b035fc6cef9419d10283274098))
+* **root:** change in the ecs-simple module ([3303631](https://github.com/thejaswitricon/pnpm/commit/3303631274a238acfe5c15e8ac4d41b869514050))
+* **root:** change in the ecs-simple module ([f30d43c](https://github.com/thejaswitricon/pnpm/commit/f30d43c810f009453964cf4500f923ca19b2d092))
+* **root:** test monorepo project ([50789d1](https://github.com/thejaswitricon/pnpm/commit/50789d112b05f501d8202973c26fef5f76bc0ab4))
+
 # 1.0.0 (2023-06-24)
 
 
