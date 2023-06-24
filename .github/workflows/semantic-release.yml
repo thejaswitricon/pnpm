@@ -23,9 +23,16 @@ jobs:
         id: changed_dirs
         run: |
           echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
-        
 
-      
+      # Check if there are any tags available
+      - name: Check for tags
+        id: check_tags
+        run: |
+          if [[ -z $(git tag -l) ]]; then
+            echo "::set-output name=has_tags::false"
+          else
+            echo "::set-output name=has_tags::true"
+          fi
 
       # Update the tag format to include the name of the directory
       - name: Update tag format
@@ -34,14 +41,17 @@ jobs:
           APP_NAME=$(echo "${{ steps.changed_dirs.outputs.dirs }}" | awk '{print tolower($0)}')
           echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
 
+      # Add new version to changelog or set initial version if no tags are available
       - name: Add new version to changelog
         id: add_version_to_changelog
         run: |
+          if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
             version=$(git describe --tags --abbrev=0)
-            sed -i "s/\[[0-9]\+\.[0-9]\+\.[0-9]\+\]/[${version}] $(date +'%Y-%m-%d')/" CHANGELOG.md        
-            continue-on-error: true 
-
-      
+          else
+            version="1.0.0"
+            echo "## Changelog" > CHANGELOG.md
+          fi
+          sed -i "s/\[[0-9]\+\.[0-9]\+\.[0-9]\+\]/[${version}] $(date +'%Y-%m-%d')/" CHANGELOG.md
 
       # https://github.com/marketplace/actions/semantic-release-action#usage
       - name: Semantic Release
