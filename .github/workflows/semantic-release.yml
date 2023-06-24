@@ -25,9 +25,9 @@ jobs:
         run: |
           echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
 
-          - name: Run semantic-release.sh
-          id: semantic_release_script
-          run: |
+      - name: Run semantic-release.sh
+        id: semantic_release_script
+        run: |
             chmod +x semantic-release.sh
             source ./semantic-release.sh
   
