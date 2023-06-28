@@ -65,7 +65,7 @@ jobs:
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
           plugins: |
-            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG', "changelogFile": "modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"}], '@semantic-release/github', '@semantic-release/git']
+            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG', "changelogFile": "modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"}], '@semantic-release/github', ['@semantic-release/git',{"assets": ["modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"]}]]
           # specify default branches to add support for the `main` branch
           # which semantic-release doesn't have as a default yet.
           branches: |
