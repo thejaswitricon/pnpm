@@ -73,7 +73,7 @@ jobs:
                     '@semantic-release/changelog',
                     {
                         changelogTitle: '# CHANGELOG',
-                        changelogFile: "[env.ASSETS_PATH]"
+                        changelogFile: "env.ASSETS_PATH"
                     }
                     ],
                     '@semantic-release/github',
