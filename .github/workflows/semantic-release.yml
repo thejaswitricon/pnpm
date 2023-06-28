@@ -43,25 +43,16 @@ jobs:
             # Add any custom logic here to update the changelog file for the changed directory
           fi
 
-      - name: Semantic Release
+      - name: Set up semantic-release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
           CHANGELOG_FILE: ${{ steps.get_changelog_file.outputs.changelog_file }}
+          CHANGELOG_LOG: 'true'
         with:
-          # ... other configuration options ...
           tag_format: 'v${version}'
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
-          plugins: |
-            - '@semantic-release/commit-analyzer'
-            - '@semantic-release/release-notes-generator'
-            - - '@semantic-release/changelog'
-                - changelogFile: ${{ steps.get_changelog_file.outputs.changelog_file }}
-            - '@semantic-release/github'
-            - '@semantic-release/git'
           branches: |
-            [
-              'master'
-            ]
+            ['master']
