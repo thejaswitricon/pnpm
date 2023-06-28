@@ -48,13 +48,14 @@ jobs:
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+          CHANGELOG_FILE: ${{ steps.get_changelog_file.outputs.changelog_file }}
         with:
           # ... other configuration options ...
           tag_format: 'v${version}'
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
           plugins: |
-            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogFile: ${{ steps.get_changelog_file.outputs.changelog_file }} }], '@semantic-release/github', '@semantic-release/git']
+            "[\"@semantic-release/commit-analyzer\", \"@semantic-release/release-notes-generator\", [\"@semantic-release/changelog\", {\"changelogFile\": \"${{ steps.get_changelog_file.outputs.changelog_file }}\"}], \"@semantic-release/github\", \"@semantic-release/git\"]"
           branches: |
             [
               'master'
