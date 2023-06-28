@@ -34,23 +34,28 @@ jobs:
           CHANGELOG_FILE="modules/${CHANGED_DIRECTORY}/changelog.md"
           echo "::set-output name=changelog_file::$CHANGELOG_FILE"
 
+      - name: Update changelog
+        id: update_changelog
+        run: |
+          CHANGELOG_FILE=${{ steps.get_changelog_file.outputs.changelog_file }}
+          if [[ -f "$CHANGELOG_FILE" ]]; then
+            echo "## Changelog" > $CHANGELOG_FILE
+            # Add any custom logic here to update the changelog file for the changed directory
+          fi
+
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
-            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-            CHANGELOG_FILE: ${{ steps.get_changelog_file.outputs.changelog_file }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-            tag_format: 'v${version}'
-            additional_packages: |
-              ['@semantic-release/changelog', '@semantic-release/git']
-            plugins: |
-              ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG'}], '@semantic-release/github', '@semantic-release/git']
-            # specify default branches to add support for the `main` branch
-            # which semantic-release doesn't have as a default yet.
-            branches: |
-              [
-                'master'
-              ]
-
-      # ... other steps in your workflow ...
+          # ... other configuration options ...
+          tag_format: 'v${version}'
+          additional_packages: |
+            ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogFile: ${{ steps.get_changelog_file.outputs.changelog_file }} }], '@semantic-release/github', '@semantic-release/git']
+          branches: |
+            [
+              'master'
+            ]
