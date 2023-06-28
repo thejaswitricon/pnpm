@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## [1.0.5](https://github.com/thejaswitricon/pnpm/compare/v1.0.4...v1.0.5) (2023-06-28)
+## [v1.0.5] 2023-06-28(https://github.com/thejaswitricon/pnpm/compare/v1.0.4...v1.0.5) (2023-06-28)
 
 
 ### Bug Fixes
@@ -18,7 +18,7 @@
 * **root:** change in the ecs-simple module ([1a23ccb](https://github.com/thejaswitricon/pnpm/commit/1a23ccb686154edff72193248c7373de9b72f1da))
 * **root:** change in the ecs-simple module ([92990aa](https://github.com/thejaswitricon/pnpm/commit/92990aa0ed1770a805a40ab508caa53576548c32))
 
-## [1.1.2](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules/index.js-v1.1.1...modules/aws/ecs/ecs-simple/modules/index.js-v1.1.2) (2023-06-28)
+## [v1.0.5] 2023-06-28(https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules/index.js-v1.1.1...modules/aws/ecs/ecs-simple/modules/index.js-v1.1.2) (2023-06-28)
 
 
 ### Bug Fixes
