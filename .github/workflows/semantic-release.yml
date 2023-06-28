@@ -55,7 +55,12 @@ jobs:
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
           plugins: |
-            "[\"@semantic-release/commit-analyzer\", \"@semantic-release/release-notes-generator\", [\"@semantic-release/changelog\", {\"changelogFile\": \"${{ steps.get_changelog_file.outputs.changelog_file }}\"}], \"@semantic-release/github\", \"@semantic-release/git\"]"
+            - '@semantic-release/commit-analyzer'
+            - '@semantic-release/release-notes-generator'
+            - - '@semantic-release/changelog'
+                - changelogFile: ${{ steps.get_changelog_file.outputs.changelog_file }}
+            - '@semantic-release/github'
+            - '@semantic-release/git'
           branches: |
             [
               'master'
