@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## [1.0.5](https://github.com/thejaswitricon/pnpm/compare/v1.0.4...v1.0.5) (2023-06-28)
+
+
+### Bug Fixes
+
+* **root:** change in the ecs-simple module ([006b4b9](https://github.com/thejaswitricon/pnpm/commit/006b4b964791ecb93f4687dfe0e8e570294d0fd9))
+* **root:** change in the ecs-simple module ([132d849](https://github.com/thejaswitricon/pnpm/commit/132d849b9124d7970a144887f437eda8a29d126d))
+* **root:** change in the ecs-simple module ([9ff654e](https://github.com/thejaswitricon/pnpm/commit/9ff654e51ee6a395a74776d2a63bb128150028f1))
+* **root:** change in the ecs-simple module ([31d0100](https://github.com/thejaswitricon/pnpm/commit/31d010010a6c83459a732483b9b07119bf42aa76))
+* **root:** change in the ecs-simple module ([3c15327](https://github.com/thejaswitricon/pnpm/commit/3c15327a67d356216ec1311bb83253c3d341c8e4))
+* **root:** change in the ecs-simple module ([841190c](https://github.com/thejaswitricon/pnpm/commit/841190c37e034ae73f49a186d70b7554c91457fe))
+* **root:** change in the ecs-simple module ([f294acd](https://github.com/thejaswitricon/pnpm/commit/f294acdf1783530d848593ba14b9b87d447ee352))
+* **root:** change in the ecs-simple module ([ed8763d](https://github.com/thejaswitricon/pnpm/commit/ed8763daf457a6dd151314fd7fc0655ad944b692))
+* **root:** change in the ecs-simple module ([7a2c561](https://github.com/thejaswitricon/pnpm/commit/7a2c561e8abbb862a5f9c4a92037eb64551dec4c))
+* **root:** change in the ecs-simple module ([21c5687](https://github.com/thejaswitricon/pnpm/commit/21c5687e2ca8d5ab0d1f2416a8b4cc5c304ed433))
+* **root:** change in the ecs-simple module ([1a23ccb](https://github.com/thejaswitricon/pnpm/commit/1a23ccb686154edff72193248c7373de9b72f1da))
+* **root:** change in the ecs-simple module ([92990aa](https://github.com/thejaswitricon/pnpm/commit/92990aa0ed1770a805a40ab508caa53576548c32))
+
 ## [1.1.2](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules/index.js-v1.1.1...modules/aws/ecs/ecs-simple/modules/index.js-v1.1.2) (2023-06-28)
 
 
