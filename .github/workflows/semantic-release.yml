@@ -5,15 +5,13 @@ on:
     branches:
       - master
     paths:
-      - 'modules/**'
-
+    - 'modules/**'
 permissions: write-all
 
 jobs:
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,38 +19,71 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed directory
-        id: get_changed_directory
+      # Get the name of the directory that was changed
+      - name: Get changed directories
+        id: changed_dirs
         run: |
-          CHANGED_DIRECTORY=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'NR==1{print $1}')
-          echo "::set-output name=changed_directory::$CHANGED_DIRECTORY"
+          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
 
-      - name: Get changelog file
-        id: get_changelog_file
+      # Check if there are any tags available
+      - name: Check for tags
+        id: check_tags
         run: |
-          CHANGED_DIRECTORY=${{ steps.get_changed_directory.outputs.changed_directory }}
-          CHANGELOG_FILE="modules/${CHANGED_DIRECTORY}/changelog.md"
-          echo "::set-output name=changelog_file::$CHANGELOG_FILE"
-
-      - name: Update changelog
-        id: update_changelog
-        run: |
-          CHANGELOG_FILE=${{ steps.get_changelog_file.outputs.changelog_file }}
-          if [[ -f "$CHANGELOG_FILE" ]]; then
-            echo "## Changelog" > $CHANGELOG_FILE
-            # Add any custom logic here to update the changelog file for the changed directory
+          if [[ -z $(git tag -l) ]]; then
+            echo "::set-output name=has_tags::false"
+          else
+            echo "::set-output name=has_tags::true"
           fi
 
-      - name: Set up semantic-release
+      # Update the tag format to include the name of the directory
+      - name: Update tag format
+        id: update_tag_format
+        run: |
+          APP_NAME=$(echo "${{ steps.changed_dirs.outputs.dirs }}" | awk '{print tolower($0)}')
+          echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
+
+        # Add new version to changelog or set initial version if no tags are available
+      - name: Add new version to changelog
+        id: add_version_to_changelog
+        run: |
+            if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
+            version=$(git describe --tags --abbrev=0)
+            else
+            version="1.0.0"
+            echo "## Changelog" > CHANGELOG.md
+            fi
+            sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" CHANGELOG.md
+            
+      # https://github.com/marketplace/actions/semantic-release-action#usage
+      - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-          CHANGELOG_FILE: ${{ steps.get_changelog_file.outputs.changelog_file }}
-          CHANGELOG_LOG: 'true'
         with:
-          tag_format: 'v${version}'
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG', "changelogFile": "modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"}], '@semantic-release/github', '@semantic-release/git']
+          # specify default branches to add support for the `main` branch
+          # which semantic-release doesn't have as a default yet.
           branches: |
-            ['master']
+            [
+              'master'
+            ]
+        
+      # Get the latest version tag
+      - name: Get latest version tag
+        run: |
+          version=$(git describe --tags --abbrev=0)
+          echo "::set-output name=version::$version"
+
+      - name: Semantic Release Output Summary
+        id: semantic_summary
+        run: |
+          echo "### Semantic Version = ${{ steps.semantic.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        continue-on-error: true
