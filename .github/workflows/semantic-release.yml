@@ -20,13 +20,10 @@ jobs:
           fetch-depth: 0
 
       # Get the name of the directory that was changed
-      - name: Get changed directories and paths
-        id: changed_dirs_paths
+      - name: Get changed directories
+        id: changed_dirs
         run: |
-            CHANGED_DIRS=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'NF>1{print $1}' | sort -u)
-            CHANGED_PATHS=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'NF>1{print $0}' | sort -u)
-            echo "::set-output name=dirs::$CHANGED_DIRS"
-            echo "::set-output name=paths::$CHANGED_PATHS"
+          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ '{print $0}' | sort -u)"
 
       # Check if there are any tags available
       - name: Check for tags
@@ -49,25 +46,13 @@ jobs:
       - name: Add new version to changelog
         id: add_version_to_changelog
         run: |
-          declare -A CHANGELOG_PATHS=(
-            ["modules/aws/eks/eks-simple"]="modules/aws/eks/eks-simple/changelog.md"
-            ["modules/aws/ecs/ecs-simple"]="modules/aws/ecs/ecs-simple/changelog.md"
-          )
-      
-          CHANGED_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          CHANGED_PATHS="${{ steps.changed_dirs_paths.outputs.paths }}"
-          IFS=$'\n' read -rd '' -a DIRS_ARRAY <<< "$CHANGED_DIRS"
-          IFS=$'\n' read -rd '' -a PATHS_ARRAY <<< "$CHANGED_PATHS"
-          for ((i=0; i<${#DIRS_ARRAY[@]}; i++)); do
-            DIR="${DIRS_ARRAY[i]}"
-            PATH="${PATHS_ARRAY[i]}"
-      
-            if [[ -v CHANGELOG_PATHS["$DIR"] ]]; then
-              CHANGELOG_FILE="${CHANGELOG_PATHS["$DIR"]}"
-              sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" "$PATH/$CHANGELOG_FILE"
+            if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
+            version=$(git describe --tags --abbrev=0)
+            else
+            version="1.0.0"
+            echo "## Changelog" > CHANGELOG.md
             fi
-          done
-      
+            sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" CHANGELOG.md
             
       # https://github.com/marketplace/actions/semantic-release-action#usage
       - name: Semantic Release
