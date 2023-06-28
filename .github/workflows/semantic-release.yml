@@ -59,38 +59,20 @@ jobs:
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
-            GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-            ASSETS_PATH: ${{ steps.changed_dirs.outputs.assets_path }}
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-            tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
-            additional_packages: |
-                ['@semantic-release/changelog', '@semantic-release/git']
-            plugins: |
-                [
-                    '@semantic-release/commit-analyzer',
-                    '@semantic-release/release-notes-generator',
-                    [
-                    '@semantic-release/changelog',
-                    {
-                        changelogTitle: '# CHANGELOG',
-                        changelogFile: "'${ASSETS_PATH}'"
-                    }
-                    ],
-                    '@semantic-release/github',
-                    [
-                    '@semantic-release/git',
-                    {
-                        assets: ["'${ASSETS_PATH}'"]
-                    }
-                    ]
-                ]
-            # specify default branches to add support for the `main` branch
-            # which semantic-release doesn't have as a default yet.
-            branches: |
-                [
-                    'master'
-                ]
-            
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
+          additional_packages: |
+            ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            ['@semantic-release/commit-analyzer', '@semantic-release/release-notes-generator', ['@semantic-release/changelog', {changelogTitle: '# CHANGELOG', "changelogFile": "modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"}], '@semantic-release/github', ['@semantic-release/git',{"assets": ["modules/aws/ecs/ecs-simple/modules/CHANGELOG.md"]}]]
+          # specify default branches to add support for the `main` branch
+          # which semantic-release doesn't have as a default yet.
+          branches: |
+            [
+              'master'
+            ]
+        
       # Get the latest version tag
       - name: Get latest version tag
         run: |
