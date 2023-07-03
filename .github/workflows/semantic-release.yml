@@ -61,7 +61,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-          config: .releaserc.js
+          command: npx semantic-release --extends .releaserc.js
 
       # Get the latest version tag
       - name: Get latest version tag
