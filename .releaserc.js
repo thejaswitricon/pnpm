@@ -1,3 +1,5 @@
+// .releaserc.js
+
 module.exports = {
   tagFormat: '${{ steps.update_tag_format.outputs.tag_format }}',
   additionalPackages: [
