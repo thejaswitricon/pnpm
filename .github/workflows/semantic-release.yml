@@ -19,6 +19,10 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install 
+        run : |
+          npm install
+
       # Get the name of the directory that was changed
       - name: Get changed directories
         id: changed_dirs
