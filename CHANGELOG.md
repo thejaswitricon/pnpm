@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## [1.0.1](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modlues/index.js-v1.0.0...modules/aws/eks/eks-simple/modlues/index.js-v1.0.1) (2023-07-03)
+## [1.0.2](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modlues/index.js-v1.0.1...modules/aws/eks/eks-simple/modlues/index.js-v1.0.2) (2023-07-03)
+
+
+### Bug Fixes
+
+* **root:** initial ([a4233e1](https://github.com/thejaswitricon/pnpm/commit/a4233e15232e8d0d58053bdc940462bfaad2110b))
+
+## [modules/aws/eks/eks-simple/modlues/index.js-v1.0.1] 2023-07-03(https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modlues/index.js-v1.0.0...modules/aws/eks/eks-simple/modlues/index.js-v1.0.1) (2023-07-03)
 
 
 ### Bug Fixes
