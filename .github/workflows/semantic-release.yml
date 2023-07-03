@@ -58,11 +58,10 @@ jobs:
       - name: Semantic Release
         id: semantic
         run: |
-          npm install -g semantic-release @semantic-release/changelog @semantic-release/git
-          npx semantic-release --config .releaserc.js
+          npm install -g semantic-release
+          npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-
 
       # Get the latest version tag
       - name: Get latest version tag
