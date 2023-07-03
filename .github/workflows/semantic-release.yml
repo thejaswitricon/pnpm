@@ -59,7 +59,7 @@ jobs:
         id: semantic
         run: |
           npm install -g semantic-release @semantic-release/changelog @semantic-release/git
-          npx semantic-release --config releaserc.js
+          npx semantic-release --config .releaserc.js
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
 
