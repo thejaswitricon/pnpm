@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## [1.0.1](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modlues/index.js-v1.0.0...modules/aws/eks/eks-simple/modlues/index.js-v1.0.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* **root:** change in the ecs-simple module ([2aecbcf](https://github.com/thejaswitricon/pnpm/commit/2aecbcf13bb843e99be85f1722c46d92ebf8dbb0))
+* **root:** change in the ecs-simple module ([609afc1](https://github.com/thejaswitricon/pnpm/commit/609afc1ff48db608a3b611917df5871d89f13064))
+* **root:** change in the ecs-simple module ([9c4a1ef](https://github.com/thejaswitricon/pnpm/commit/9c4a1ef477f04f4392e36f0f34be5700c5646cd0))
+* **root:** change in the ecs-simple module ([99e4f90](https://github.com/thejaswitricon/pnpm/commit/99e4f90d692d06280b1e35bcf612b673c2149cfc))
+* **root:** change in the ecs-simple module ([c1df56e](https://github.com/thejaswitricon/pnpm/commit/c1df56e18ac5f3d39cfbf2858f8178d59455324e))
+* **root:** initial ([da3658a](https://github.com/thejaswitricon/pnpm/commit/da3658a0828b51f2615ae0e22b1391cc59de53cf))
+* **root:** initial ([5900fe0](https://github.com/thejaswitricon/pnpm/commit/5900fe0717c80cc391500a4c257985767114c094))
+* **root:** initial ([4f92cbc](https://github.com/thejaswitricon/pnpm/commit/4f92cbc83c3e938c2543a5bdba8de2d6b489af05))
+
 ## [v1.0.5] 2023-06-28(https://github.com/thejaswitricon/pnpm/compare/v1.0.4...v1.0.5) (2023-06-28)
 
 
