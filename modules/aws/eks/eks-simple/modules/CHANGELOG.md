@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modules-v1.0.0...modules/aws/eks/eks-simple/modules-v1.0.1) (2023-07-04)
+
+
+### Bug Fixes
+
+* **root:** initial ([80c2076](https://github.com/thejaswitricon/pnpm/commit/80c207670ea7010c4d940968e51af00bc7c7d5b1))
+
 # 1.0.0 (2023-07-04)
 
 
