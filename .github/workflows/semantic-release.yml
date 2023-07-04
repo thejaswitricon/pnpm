@@ -55,17 +55,17 @@ jobs:
           done <<< "$APP_DIRS"
 
       # Add new version to changelog or set initial version if no tags are available
-      - name: Add new version to changelog
-        id: add_version_to_changelog
-        run: |
-          if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
-            version=$(git describe --tags --abbrev=0)
-          else
-            version="1.0.0"
-            echo "## Changelog" > CHANGELOG.md
-          fi
-          changelog_path="${{ steps.changelog_path.outputs.path }}"
-          sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" "$changelog_path"
+      # - name: Add new version to changelog
+      #   id: add_version_to_changelog
+      #   run: |
+      #     if [[ "${{ steps.check_tags.outputs.has_tags }}" == "true" ]]; then
+      #       version=$(git describe --tags --abbrev=0)
+      #     else
+      #       version="1.0.0"
+      #       echo "## Changelog" > CHANGELOG.md
+      #     fi
+      #     changelog_path="${{ steps.changelog_path.outputs.path }}"
+      #     sed -i "s|\[[0-9]\+\.[0-9]\+\.[0-9]\+\]|[${version}] $(date +'%Y-%m-%d')|" "$changelog_path"
 
       # https://github.com/marketplace/actions/semantic-release-action#usage
       - name: Semantic Release
