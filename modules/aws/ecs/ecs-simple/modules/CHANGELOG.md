@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.3...modules/aws/ecs/ecs-simple/modules-v1.0.4) (2023-07-04)
+
+
+### Bug Fixes
+
+* **root:** added feature to the ecs-module configuration ([6eaa62d](https://github.com/thejaswitricon/pnpm/commit/6eaa62d34816e90385c42c9c656f26472542552c))
+
 ## [1.0.3](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.2...modules/aws/ecs/ecs-simple/modules-v1.0.3) (2023-07-04)
 
 
