@@ -88,12 +88,6 @@ jobs:
               'master'
             ]
 
-      # Get the latest version tag
-      - name: Get latest version tag
-        run: |
-          version=$(git describe --tags --abbrev=0)
-          echo "::set-output name=version::$version"
-
       - name: Semantic Release Output Summary
         id: semantic_summary
         run: |
