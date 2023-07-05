@@ -25,16 +25,6 @@ jobs:
         run: |
           echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')"
 
-      # Check if there are any tags available
-      - name: Check for tags
-        id: check_tags
-        run: |
-          if [[ -z $(git tag -l) ]]; then
-            echo "::set-output name=has_tags::false"
-          else
-            echo "::set-output name=has_tags::true"
-          fi
-
       # Update the tag format to include the name of the directory
       - name: Update tag format
         id: update_tag_format
