@@ -1,3 +1,14 @@
+## [1.0.7](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modules-v1.0.6...modules/aws/eks/eks-simple/modules-v1.0.7) (2023-07-05)
+
+
+### Bug Fixes
+
+* **root:** added feature to the ecs-module configuration ([997b8e1](https://github.com/thejaswitricon/pnpm/commit/997b8e17fd55800f9d184bc13d3564ab0826d563))
+* **root:** added feature to the eks-module configuration ([58793af](https://github.com/thejaswitricon/pnpm/commit/58793af84248f77647f98f0c0440e7982e5f9547))
+* **root:** added feature to the eks-module configuration ([109b0ce](https://github.com/thejaswitricon/pnpm/commit/109b0ce7aba5a58ccb28bb4dd1f77c2181132df3))
+* **root:** added feature to the eks-module configuration ([0fcfc00](https://github.com/thejaswitricon/pnpm/commit/0fcfc005f1c2dede3e58480166d134af14863a6f))
+* **root:** added feature to the eks-module configuration ([1a0e81f](https://github.com/thejaswitricon/pnpm/commit/1a0e81fffd7aafce3b550f778771bb20c463cea0))
+
 ## [1.0.6](https://github.com/thejaswitricon/pnpm/compare/modules/aws/eks/eks-simple/modules-v1.0.5...modules/aws/eks/eks-simple/modules-v1.0.6) (2023-07-05)
 
 
