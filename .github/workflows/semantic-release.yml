@@ -19,11 +19,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Get the folder path of changed file
       - name: Get changed directories
         id: changed_dirs
         run: |
-          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} {if ($0 ~ /modules/) print $0}' | awk -F/ '{NF--}')"
-      
+          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')"
 
       # Check if there are any tags available
       - name: Check for tags
