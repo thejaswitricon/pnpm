@@ -78,7 +78,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         continue-on-error: true
 
-
+        
 
 # name: Semantic Release for Apps
 
