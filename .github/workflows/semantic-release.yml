@@ -39,16 +39,8 @@ jobs:
       - name: Update tag format
         id: update_tag_format
         run: |
-          changed_dirs="${{ steps.changed_dirs.outputs.dirs }}"
-          tags=()
-          for dir in $changed_dirs; do
-            app_name=$(echo "$dir" | awk '{print tolower($0)}')
-            tag_format="${app_name}-v\${version}"
-            tags+=("$tag_format")
-          done
-          echo "Updated tags: ${tags[@]}"
-          echo "::set-output name=tag_formats::${tags[@]}"
-
+          APP_NAME=$(echo "${{ steps.changed_dirs.outputs.dirs }}" | awk '{print tolower($0)}')
+          echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
 
       # Determine the path to the CHANGELOG.md file dynamically
       - name: Determine CHANGELOG.md path
