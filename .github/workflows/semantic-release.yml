@@ -19,15 +19,22 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Get the list of changed directories
+      # Get the folder path of changed file
       - name: Get changed directories
         id: changed_dirs
         run: |
-          git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS="/"} {if ($1 == "modules") { $NF=""; print $0 }}' | sort -u > changed_dirs.txt
-          changed_files=$(cat changed_dirs.txt)
-          echo "Changed folder: $changed_files"
-          echo "::set-output name=dirs::$changed_files"
-          
+          echo "::set-output name=dirs::$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')"
+
+      # Check if there are any tags available
+      - name: Check for tags
+        id: check_tags
+        run: |
+          if [[ -z $(git tag -l) ]]; then
+            echo "::set-output name=has_tags::false"
+          else
+            echo "::set-output name=has_tags::true"
+          fi
+
       # Update the tag format to include the name of the directory
       - name: Update tag format
         id: update_tag_format
