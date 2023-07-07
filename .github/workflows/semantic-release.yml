@@ -19,45 +19,52 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed_files
-        run: |
-          CHANGED_FILES=$(git diff --name-only --diff-filter=d ${{ github.event.before }} ${{ github.sha }})
-          if [[ -z $CHANGED_FILES ]]; then
-            echo "::set-output name=files::"
-          else
-            echo "::set-output name=files::$CHANGED_FILES"
-          fi
-
-      - name: Get directories with changes
+      # Get the folder path of changed file
+      - name: Get changed directories
         id: changed_dirs
         run: |
-          CHANGED_DIRS=$(echo "${{ steps.changed_files.outputs.files }}" | awk -F/ 'BEGIN{OFS=FS} {NF--} 1' | sort -u)
+          CHANGED_DIRS=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=dirs::"
           else
             echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
 
-      - name: Determine folders with CHANGELOG.md files
-        id: changelog_dirs
+      # Update the tag format to include the name of the directory
+      - name: Update tag format
+        id: update_tag_format
         run: |
           APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          CHANGELOG_DIRS=""
-          while IFS= read -r dir; do
-            if [[ -f "${dir}/CHANGELOG.md" ]]; then
-              CHANGELOG_DIRS="${CHANGELOG_DIRS}${dir}\n"
-            fi
-          done <<< "$APP_DIRS"
-          echo "::set-output name=dirs::${CHANGELOG_DIRS}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=tag_format::v\${version}"
+          else
+            APP_NAME=$(echo "$APP_DIRS" | awk '{print tolower($0)}')
+            echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
+          fi
 
+      # Determine the path to the CHANGELOG.md file
+      - name: Determine CHANGELOG.md path
+        id: changelog_path
+        run: |
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=path::./CHANGELOG.md"
+          else
+            while IFS= read -r dir; do
+              if [[ -f "${dir}/CHANGELOG.md" ]]; then
+                echo "::set-output name=path::${dir}/CHANGELOG.md"
+              fi
+            done <<< "$APP_DIRS"
+          fi
+
+      # Run semantic release
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-          tag_format: 'v${{ steps.semantic.outputs.version }}'
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
           plugins: |
@@ -72,30 +79,7 @@ jobs:
             [
               'master'
             ]
-        if: steps.changed_dirs.outputs.dirs != ''
-
-      - name: Semantic Release for Single Folder
-        uses: docker://ghcr.io/codfish/semantic-release-action:v2
-        id: single_folder_semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
-        with:
-          tag_format: 'v${{ steps.update_tag_format.outputs.tag_format }}'
-          additional_packages: |
-            ['@semantic-release/changelog', '@semantic-release/git']
-          plugins: |
-            [
-              '@semantic-release/commit-analyzer',
-              '@semantic-release/release-notes-generator',
-              ['@semantic-release/changelog', { "changelogFile": "${{ steps.single_changelog_path.outputs.path }}" }],
-              '@semantic-release/github',
-              ['@semantic-release/git', { "assets": ["${{ steps.single_changelog_path.outputs.path }}"] }]
-            ]
-          branches: |
-            [
-              'master'
-            ]
-        if: steps.single_changelog_path.outputs.path != ''
+        if: steps.changelog_path.outputs.path != ''
 
       - name: Semantic Release Output Summary
         id: semantic_summary
@@ -107,7 +91,7 @@ jobs:
         continue-on-error: true
 
 
-
+        
 # name: Semantic Release for Apps
 
 # on:
