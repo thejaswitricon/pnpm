@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - master
-
+    # paths:
+    #   - 'modules/**'
 permissions: write-all
 
 jobs:
@@ -18,7 +19,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Get the folder paths of changed files
+      # Get the folder path of changed file
       - name: Get changed directories
         id: changed_dirs
         run: |
@@ -29,87 +30,66 @@ jobs:
             echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
 
-      # Determine the paths to the CHANGELOG.md files for each directory
-      - name: Determine CHANGELOG.md paths
-        id: changelog_paths
+      # Update the tag format to include the name of the directory
+      - name: Update tag format
+        id: update_tag_format
         run: |
-          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          if [[ -z $DIRS ]]; then
-            echo "::set-output name=paths::"
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=tag_format::v\${version}"
           else
-            CHANGELOG_PATHS=""
-            IFS=$'\n' read -r -d '' -a DIRS_ARRAY <<< "$DIRS"
-            for dir in "${DIRS_ARRAY[@]}"
-            do
-              if [[ -f "$dir/CHANGELOG.md" ]]; then
-                CHANGELOG_PATHS+="$dir/CHANGELOG.md"$'\n'
+            APP_NAME=$(echo "$APP_DIRS" | awk '{print tolower($0)}')
+            echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
+          fi
+
+      # Determine the path to the CHANGELOG.md file
+      - name: Determine CHANGELOG.md path
+        id: changelog_path
+        run: |
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=path::./CHANGELOG.md"
+          else
+            while IFS= read -r dir; do
+              if [[ -f "${dir}/CHANGELOG.md" ]]; then
+                echo "::set-output name=path::${dir}/CHANGELOG.md"
               fi
-            done
-            if [[ -z $CHANGELOG_PATHS ]]; then
-              echo "::set-output name=paths::"
-            else
-              echo "::set-output name=paths::$CHANGELOG_PATHS"
-            fi
+            done <<< "$APP_DIRS"
           fi
 
-      # Check if there are any CHANGELOG.md paths found
-      - name: Check if CHANGELOG.md paths exist
-        id: check_changelog_paths
-        run: |
-          if [[ -z "${{ steps.changelog_paths.outputs.paths }}" ]]; then
-            echo "::set-output name=abort::true"
-          else
-            echo "::set-output name=abort::false"
-          fi
-
-      # Abort the workflow if no CHANGELOG.md paths found
-      - name: Abort Workflow if no CHANGELOG.md paths
-        if: steps.check_changelog_paths.outputs.abort == 'true'
-        run: exit 0
-
-      # Iterate over the directories with changelog.md files
-      - name: Iterate over directories with CHANGELOG.md
-        id: iterate_dirs
-        run: |
-          CHANGELOG_PATHS="${{ steps.changelog_paths.outputs.paths }}"
-          if [[ -n $CHANGELOG_PATHS ]]; then
-            IFS=$'\n' read -r -d '' -a PATHS_ARRAY <<< "$CHANGELOG_PATHS"
-            for path in "${PATHS_ARRAY[@]}"
-            do
-              echo "::set-output name=path::$path"
-            done
-          fi
-
-      # Run semantic release for each directory with a changelog.md file
-      - name: Run semantic release
-        id: semantic_release
-        run: |
-          PATHS_ARRAY=("${{ steps.iterate_dirs.outputs.path }}")
-          for path in "${PATHS_ARRAY[@]}"
-          do
-            FOLDER_NAME=$(basename "$(dirname "$path")")
-            echo "Running semantic release for $FOLDER_NAME folder: $path"
-            # Run semantic release for each directory with the respective changelog.md file
-            docker run -e GITHUB_TOKEN="${{ secrets.PAT_GITHUB2 }}" \
-              -v "$(pwd):/github/workspace" \
-              ghcr.io/codfish/semantic-release-action:v2 --path="$path"
-          done
+      # Run semantic release
+      - name: Semantic Release
+        uses: docker://ghcr.io/codfish/semantic-release-action:v2
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+        with:
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
+          additional_packages: |
+            ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            [
+              '@semantic-release/commit-analyzer',
+              '@semantic-release/release-notes-generator',
+              ['@semantic-release/changelog', { "changelogFile": "${{ steps.changelog_path.outputs.path }}" }],
+              '@semantic-release/github',
+              ['@semantic-release/git', { "assets": ["${{ steps.changelog_path.outputs.path }}"] }]
+            ]
+          branches: |
+            [
+              'master'
+            ]
+        if: steps.changelog_path.outputs.path != ''
 
       - name: Semantic Release Output Summary
         id: semantic_summary
         run: |
-          PATHS_ARRAY=("${{ steps.iterate_dirs.outputs.path }}")
-          for path in "${PATHS_ARRAY[@]}"
-          do
-            FOLDER_NAME=$(basename "$(dirname "$path")")
-            if [[ -n $path ]]; then
-              echo "### Semantic Version ($FOLDER_NAME) = ${{ steps.semantic_release.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "${{ toJson(steps.semantic_release.outputs) }}" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
+          echo "### Semantic Version = ${{ steps.semantic.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         continue-on-error: true
+        
 
 
 
