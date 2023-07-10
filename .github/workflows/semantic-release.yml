@@ -31,21 +31,21 @@ jobs:
           fi
 
       # Update the tag format to include the name of the directory
-      - name: Update tag format
-        id: update_tag_format
-        run: |
-          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          if [[ -z $APP_DIRS ]]; then
-            echo "::set-output name=tags::"
-          else
-            TAGS=""
-            IFS=$'\n' read -rd '' -a DIR_ARRAY <<< "$APP_DIRS"
-            for DIR in "${DIR_ARRAY[@]}"; do
-              APP_NAME=$(echo "$DIR" | awk '{print tolower($0)}')
-              TAGS+=" ${APP_NAME}-v\${version}"
-            done
-            echo "::set-output name=tags::$TAGS"
-          fi
+      # - name: Update tag format
+      #   id: update_tag_format
+      #   run: |
+      #     APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+      #     if [[ -z $APP_DIRS ]]; then
+      #       echo "::set-output name=tags::"
+      #     else
+      #       TAGS=""
+      #       IFS=$'\n' read -rd '' -a DIR_ARRAY <<< "$APP_DIRS"
+      #       for DIR in "${DIR_ARRAY[@]}"; do
+      #         APP_NAME=$(echo "$DIR" | awk '{print tolower($0)}')
+      #         TAGS+=" ${APP_NAME}-v\${version}"
+      #       done
+      #       echo "::set-output name=tags::$TAGS"
+      #     fi
 
       # Determine the path to the CHANGELOG.md file
       - name: Determine CHANGELOG.md paths
