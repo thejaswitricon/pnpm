@@ -29,31 +29,43 @@ jobs:
             echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
 
-      # Split the changed directories into an array
-      - name: Split changed directories
-        id: split_dirs
-        run: |
-          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-          IFS=$'\n' read -r -d '' -a DIRS_ARRAY <<< "$APP_DIRS"
-          echo "::set-output name=dirs_array::${DIRS_ARRAY[*]}"
-
       # Determine the paths to the CHANGELOG.md files for each directory
       - name: Determine CHANGELOG.md paths
         id: changelog_paths
         run: |
-          DIRS_ARRAY=("${{ steps.split_dirs.outputs.dirs_array }}")
-          CHANGELOG_PATHS=""
-          for dir in "${DIRS_ARRAY[@]}"
-          do
-            if [[ -f "$dir/CHANGELOG.md" ]]; then
-              CHANGELOG_PATHS+="$dir/CHANGELOG.md"$'\n'
-            fi
-          done
-          if [[ -z $CHANGELOG_PATHS ]]; then
+          DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $DIRS ]]; then
             echo "::set-output name=paths::"
           else
-            echo "::set-output name=paths::$CHANGELOG_PATHS"
+            CHANGELOG_PATHS=""
+            IFS=$'\n' read -r -d '' -a DIRS_ARRAY <<< "$DIRS"
+            for dir in "${DIRS_ARRAY[@]}"
+            do
+              if [[ -f "$dir/CHANGELOG.md" ]]; then
+                CHANGELOG_PATHS+="$dir/CHANGELOG.md"$'\n'
+              fi
+            done
+            if [[ -z $CHANGELOG_PATHS ]]; then
+              echo "::set-output name=paths::"
+            else
+              echo "::set-output name=paths::$CHANGELOG_PATHS"
+            fi
           fi
+
+      # Check if there are any CHANGELOG.md paths found
+      - name: Check if CHANGELOG.md paths exist
+        id: check_changelog_paths
+        run: |
+          if [[ -z "${{ steps.changelog_paths.outputs.paths }}" ]]; then
+            echo "::set-output name=abort::true"
+          else
+            echo "::set-output name=abort::false"
+          fi
+
+      # Abort the workflow if no CHANGELOG.md paths found
+      - name: Abort Workflow if no CHANGELOG.md paths
+        if: steps.check_changelog_paths.outputs.abort == 'true'
+        run: exit 0
 
       # Iterate over the directories with changelog.md files
       - name: Iterate over directories with CHANGELOG.md
@@ -70,12 +82,13 @@ jobs:
 
       # Run semantic release for each directory with a changelog.md file
       - name: Run semantic release
-        id: semantic
+        id: semantic_release
         run: |
           PATHS_ARRAY=("${{ steps.iterate_dirs.outputs.path }}")
           for path in "${PATHS_ARRAY[@]}"
           do
-            echo "Running semantic release for $path"
+            FOLDER_NAME=$(basename "$(dirname "$path")")
+            echo "Running semantic release for $FOLDER_NAME folder: $path"
             # Run semantic release for each directory with the respective changelog.md file
             docker run -e GITHUB_TOKEN="${{ secrets.PAT_GITHUB2 }}" \
               -v "$(pwd):/github/workspace" \
@@ -85,11 +98,19 @@ jobs:
       - name: Semantic Release Output Summary
         id: semantic_summary
         run: |
-          echo "### Semantic Version = ${{ steps.semantic.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
-          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          PATHS_ARRAY=("${{ steps.iterate_dirs.outputs.path }}")
+          for path in "${PATHS_ARRAY[@]}"
+          do
+            FOLDER_NAME=$(basename "$(dirname "$path")")
+            if [[ -n $path ]]; then
+              echo "### Semantic Version ($FOLDER_NAME) = ${{ steps.semantic_release.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${{ toJson(steps.semantic_release.outputs) }}" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
         continue-on-error: true
+
 
 
         
