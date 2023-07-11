@@ -30,64 +30,84 @@ jobs:
             echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
 
-      # Update the tag format to include the name of the directory
-      # - name: Update tag format
-      #   id: update_tag_format
-      #   run: |
-      #     APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
-      #     if [[ -z $APP_DIRS ]]; then
-      #       echo "::set-output name=tags::"
-      #     else
-      #       TAGS=""
-      #       IFS=$'\n' read -rd '' -a DIR_ARRAY <<< "$APP_DIRS"
-      #       for DIR in "${DIR_ARRAY[@]}"; do
-      #         APP_NAME=$(echo "$DIR" | awk '{print tolower($0)}')
-      #         TAGS+=" ${APP_NAME}-v\${version}"
-      #       done
-      #       echo "::set-output name=tags::$TAGS"
-      #     fi
-
-      # Determine the path to the CHANGELOG.md file
-      - name: Determine CHANGELOG.md paths
-        id: changelog_paths
+      # Determine the folder path of the changed folder
+      - name: Determine changed folder path
+        id: changed_folder
         run: |
           APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
           if [[ -z $APP_DIRS ]]; then
-            echo "::set-output name=paths::./CHANGELOG.md"
+            echo "::set-output name=folder::"
           else
-            PATHS=""
-            IFS=$'\n' read -rd '' -a DIR_ARRAY <<< "$APP_DIRS"
-            for DIR in "${DIR_ARRAY[@]}"; do
-              if [[ -f "${DIR}/CHANGELOG.md" ]]; then
-                PATHS+=" ${DIR}/CHANGELOG.md"
-              fi
-            done
-            echo "::set-output name=paths::$PATHS"
+            CHANGED_FOLDER=$(dirname "$APP_DIRS")
+            echo "::set-output name=folder::$CHANGED_FOLDER"
           fi
 
-      # Run semantic release for each changed folder with CHANGELOG.md file
+      # Check if the changed folder path matches any path in semver.yml
+      - name: Check if folder is eligible for semantic versioning
+        id: check_semver_path
+        run: |
+          SEMVER_PATH=$(grep -F "${{ steps.changed_folder.outputs.folder }}" .github/semver.yml)
+          if [[ -n $SEMVER_PATH ]]; then
+            echo "::set-output name=semver_path::${{ steps.changed_folder.outputs.folder }}"
+          else
+            echo "::set-output name=semver_path::"
+          fi
+
+      # Abort workflow if the changed folder is not eligible for semantic versioning
+      - name: Abort workflow if folder is not eligible for semantic versioning
+        if: steps.check_semver_path.outputs.semver_path == ''
+        run: exit 78
+
+      # Update the tag format to include the folder path prefix
+      - name: Update tag format
+        id: update_tag_format
+        run: |
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=tag_format::v\${version}"
+          else
+            APP_NAME=$(echo "$APP_DIRS" | awk '{print tolower($0)}')
+            echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
+          fi
+
+      # Determine the path to the CHANGELOG.md file
+      - name: Determine CHANGELOG.md path
+        id: changelog_path
+        run: |
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
+            echo "::set-output name=path::./CHANGELOG.md"
+          else
+            while IFS= read -r dir; do
+              if [[ -f "${dir}/CHANGELOG.md" ]]; then
+                echo "::set-output name=path::${dir}/CHANGELOG.md"
+              fi
+            done <<< "$APP_DIRS"
+          fi
+
+      # Run semantic release
       - name: Semantic Release
-        id: semantic
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
         with:
-          tag_format: '${{ steps.update_tag_format.outputs.tags }}'
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
           additional_packages: |
             ['@semantic-release/changelog', '@semantic-release/git']
           plugins: |
             [
               '@semantic-release/commit-analyzer',
               '@semantic-release/release-notes-generator',
-              ['@semantic-release/changelog', { changelogTitle: '# CHANGELOG', "changelogFile": "${{ steps.changelog_paths.outputs.paths }}" }],
+              ['@semantic-release/changelog', { changelogTitle: '# CHANGELOG', "changelogFile": "${{ steps.changelog_path.outputs.path }}" }],
               '@semantic-release/github',
-              ['@semantic-release/git', { "assets": ["${{ steps.changelog_paths.outputs.paths }}"] }]
+              ['@semantic-release/git', { "assets": ["${{ steps.changelog_path.outputs.path }}"] }]
             ]
           branches: |
             [
               'master'
             ]
-        if: steps.changelog_paths.outputs.paths != ''
+        if: steps.changelog_path.outputs.path != ''
 
       - name: Semantic Release Output Summary
         id: semantic_summary
@@ -97,7 +117,6 @@ jobs:
           echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
         continue-on-error: true
-
 
 
         
