@@ -42,7 +42,7 @@ jobs:
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             MATCHED_FOLDER=""
             while IFS= read -r pattern; do
-              if [[ "$CHANGED_FOLDER" =~ ^$pattern$ ]]; then
+              if [[ "$CHANGED_FOLDER" == $pattern* ]]; then
                 MATCHED_FOLDER=$CHANGED_FOLDER
                 break
               fi
@@ -54,8 +54,6 @@ jobs:
               exit 1
             fi
           fi
-
-
 
       # Step 3: Create git tags
       - name: Update tag format
