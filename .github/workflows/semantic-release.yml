@@ -24,7 +24,7 @@ jobs:
         id: check_folders
         run: |
           CHANGED_FOLDERS="${{ steps.get_changed_files.outputs.changed_folders }}"
-          SEMVER_FOLDERS=$(jq -r '.include[]' semver.yml)
+          SEMVER_FOLDERS=$(jq -r '.include[]' .github/semver.yml)
           for folder in $CHANGED_FOLDERS; do
             if [[ ! "$SEMVER_FOLDERS" =~ (^| )"$folder"($| ) ]]; then
               echo "Folder $folder is not included in semver.yml. Aborting workflow."
@@ -33,6 +33,7 @@ jobs:
           done
 
       # Continue with the remaining steps of your workflow here
+
 
 
         
