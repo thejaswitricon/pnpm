@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [1.0.8](https://github.com/thejaswitricon/pnpm/compare/v1.0.7...v1.0.8) (2023-07-12)
+
+
+### Bug Fixes
+
+* **root:** initial ([bc65a6f](https://github.com/thejaswitricon/pnpm/commit/bc65a6f164240e5035ed87d2de7589691ea28a74))
+* **root:** initial ([bf8080d](https://github.com/thejaswitricon/pnpm/commit/bf8080db3707da8682e09db34da5e9e3c96518e5))
+* **root:** initial ([885d442](https://github.com/thejaswitricon/pnpm/commit/885d442d6f5ed65b26edfabcae0f455e666b1d11))
+* **root:** initial ([b7e21dc](https://github.com/thejaswitricon/pnpm/commit/b7e21dc35b9b8073f04a5429bd6236435af6be90))
+
 ## [1.0.7](https://github.com/thejaswitricon/pnpm/compare/v1.0.6...v1.0.7) (2023-07-12)
 
 
