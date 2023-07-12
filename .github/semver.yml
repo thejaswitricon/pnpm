@@ -1,7 +1,7 @@
 ---
 # Configuration for Semantic Release monorepo workflows
-scope: tandfgroup/terraform
+scope: '@tandfgroup/terraform'
 include:
-- apps/*
-- modules/*/*
-- modules/*/*/modules/*
+  - apps/*
+  - modules/*/*
+  - modules/*/*/modules/*
