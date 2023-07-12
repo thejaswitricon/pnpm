@@ -27,10 +27,9 @@ jobs:
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=folder::"
           else
-            CHANGED_FOLDER=$(dirname "$CHANGED_DIRS" | sort -u)
+            CHANGED_FOLDER=$(dirname "$CHANGED_DIRS" | sort -u | awk 'BEGIN{ORS="/"} {print $0}' | sed 's/\/$//')
             echo "::set-output name=folder::$CHANGED_FOLDER"
           fi
-
 
       # Step 2: Check if the changed folder should be considered
       - name: Check folder with semver.yml
