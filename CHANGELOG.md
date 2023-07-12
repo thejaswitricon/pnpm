@@ -1,3 +1,41 @@
+# CHANGELOG
+
+## [1.0.7](https://github.com/thejaswitricon/pnpm/compare/v1.0.6...v1.0.7) (2023-07-12)
+
+
+### Bug Fixes
+
+* **root:** ci update ([10be614](https://github.com/thejaswitricon/pnpm/commit/10be61408213eee2c3e4318b74f0fe196c739cef))
+* **root:** ci update ([84f929d](https://github.com/thejaswitricon/pnpm/commit/84f929d79a7bd41d1612854fa20c7914b200ffe9))
+* **root:** ci update ([f57299a](https://github.com/thejaswitricon/pnpm/commit/f57299a95bcf36a55dfaccd1cbd5977a45c16fc1))
+* **root:** ci update ([ad456df](https://github.com/thejaswitricon/pnpm/commit/ad456dffbe92b9ab1189ddcdda68b49633e545a1))
+* **root:** initial ([b51a0aa](https://github.com/thejaswitricon/pnpm/commit/b51a0aa9808ce2f038b97c5b4574e610d0ce8363))
+* **root:** initial ([6a253a7](https://github.com/thejaswitricon/pnpm/commit/6a253a7f102f623112f27f227dbe009e4858bb5e))
+* **root:** initial ([b39e909](https://github.com/thejaswitricon/pnpm/commit/b39e909813f78a2a24a12ea2df73d712dec89ac7))
+* **root:** initial ([9f593a3](https://github.com/thejaswitricon/pnpm/commit/9f593a3d5b3754dcff8bd3df2f69dc719bd9e5d0))
+* **root:** initial ([82b61c9](https://github.com/thejaswitricon/pnpm/commit/82b61c9de1a44b3ffa3d5a341600e808b080f958))
+* **root:** initial ([42d59c3](https://github.com/thejaswitricon/pnpm/commit/42d59c3e8b4103961e29591fa133a5285a180c30))
+* **root:** initial ([1c733d5](https://github.com/thejaswitricon/pnpm/commit/1c733d511bbd6d36499a7ed658e51a5d087a5fd5))
+* **root:** initial ([b3c3707](https://github.com/thejaswitricon/pnpm/commit/b3c37076bc5e6f83614f6aa5d26afbf4e061f719))
+* **root:** initial ([9ead0b2](https://github.com/thejaswitricon/pnpm/commit/9ead0b23fd498c40f953e3e83e7d5aa4629c566f))
+* **root:** initial ([87e7254](https://github.com/thejaswitricon/pnpm/commit/87e7254afcee2ca7d94253a95141890bef33a134))
+* **root:** initial ([a4cfc96](https://github.com/thejaswitricon/pnpm/commit/a4cfc96596ba7fe2be797347c1e440e36083107a))
+* **root:** initial ([91d85a9](https://github.com/thejaswitricon/pnpm/commit/91d85a96a2cccaebe93d630e5b6bfc92a7827b79))
+* **root:** initial ([4443f32](https://github.com/thejaswitricon/pnpm/commit/4443f328f7e169640c8a3888e7e498e6a37420e5))
+* **root:** initial ([238884a](https://github.com/thejaswitricon/pnpm/commit/238884a6540aae63564868a7937215774ab2d396))
+* **root:** initial ([c145228](https://github.com/thejaswitricon/pnpm/commit/c145228ac073d6a4d3aa2363cd9a919a3c9b4e50))
+* **root:** initial ([3fb7d91](https://github.com/thejaswitricon/pnpm/commit/3fb7d91ffa7a77cb9130832b5a8391c76dd9a03c))
+* **root:** initial ([d64f0c2](https://github.com/thejaswitricon/pnpm/commit/d64f0c27e0ef92eaaccfb9120f78686722bc0723))
+* **root:** initial ([65f6223](https://github.com/thejaswitricon/pnpm/commit/65f62235c5654bfdeea7272ead82dbaac9281241))
+* **root:** initial ([3232507](https://github.com/thejaswitricon/pnpm/commit/3232507a3ac08ecc2fb96c5480745583167d6548))
+* **root:** initial ([7492ba6](https://github.com/thejaswitricon/pnpm/commit/7492ba62eca76e776b90404f3534decc3d9b3ecb))
+* **root:** initial ([48006c9](https://github.com/thejaswitricon/pnpm/commit/48006c9caabbfaff2801016ac9233beb78c2080d))
+* **root:** initial ([02010f5](https://github.com/thejaswitricon/pnpm/commit/02010f50a702bc9c149936f27f221d40de8eafbb))
+* test flow ([556235b](https://github.com/thejaswitricon/pnpm/commit/556235bca4257e41ea7a1a4f137d0ecfcb6be0ee))
+* test flow ([afab997](https://github.com/thejaswitricon/pnpm/commit/afab99773ae04b5ef53a5e205df0211098030945))
+* test flow ([ee6b278](https://github.com/thejaswitricon/pnpm/commit/ee6b27833d77119834d9a2cee63f4da4ada555f1))
+* workflow ([5e5eda3](https://github.com/thejaswitricon/pnpm/commit/5e5eda3993f63a7b9781401046a6c7da72aa954d))
+
 ## [1.0.6](https://github.com/thejaswitricon/pnpm/compare/v1.0.5...v1.0.6) (2023-07-07)
 
 
