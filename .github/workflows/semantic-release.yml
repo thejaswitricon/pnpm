@@ -39,8 +39,10 @@ jobs:
           if [[ -z $CHANGED_FOLDER ]]; then
             echo "::set-output name=consider_folder::"
           else
-            if grep -q "${CHANGED_FOLDER}" .github/semver.yml; then
-              echo "::set-output name=consider_folder::$CHANGED_FOLDER"
+            if grep -q "${CHANGED_FOLDER}" semver.yml; then
+              ROOT_PATH=$(git rev-parse --show-toplevel)
+              FOLDER_PATH="$ROOT_PATH/$CHANGED_FOLDER"
+              echo "::set-output name=consider_folder::$FOLDER_PATH"
             else
               echo "::error::Folder $CHANGED_FOLDER should not trigger a release."
               exit 1
