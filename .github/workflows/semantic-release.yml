@@ -20,15 +20,14 @@ jobs:
           fetch-depth: 0
 
       # Step 1: Get the name of the folder that had the changes
-      - name: Get changed folder name
+      - name: Get changed directories
         id: changed_folder
         run: |
           CHANGED_DIRS=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')
           if [[ -z $CHANGED_DIRS ]]; then
-            echo "::set-output name=folder::"
+            echo "::set-output name=dirs::"
           else
-            CHANGED_FOLDER=$(echo "$CHANGED_DIRS" | awk -F/ '{print $1}' | sort -u)
-            echo "::set-output name=folder::$CHANGED_FOLDER"
+            echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
 
       # Step 2: Check if the changed folder should be considered
@@ -42,7 +41,8 @@ jobs:
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             MATCHED_FOLDER=""
             while IFS= read -r pattern; do
-              if [[ $CHANGED_FOLDER == $pattern ]]; then
+              python -c "import fnmatch; import sys; sys.exit(0 if fnmatch.fnmatch('$CHANGED_FOLDER', '$pattern') else 1)"
+              if [[ $? -eq 0 ]]; then
                 MATCHED_FOLDER=$CHANGED_FOLDER
                 break
               fi
@@ -56,6 +56,7 @@ jobs:
               exit 1
             fi
           fi
+
 
 
       # Step 3: Create git tags
