@@ -1,39 +1,126 @@
-name: Semantic Release Workflow
+name: Semantic Release for Apps
 
 on:
   push:
     branches:
       - master
+    # paths:
+    #   - 'modules/**'
+permissions: write-all
 
 jobs:
-  build:
+  release:
+    name: Semantic Release
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
+        id: checkout
+        with:
+          fetch-depth: 0
 
-      - name: Get changed files
-        id: get_changed_files
+      # Step 1: Get the name of the folder that had the changes
+      - name: Get changed folder name
+        id: changed_folder
         run: |
-          CHANGED_FOLDERS=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }} | xargs -I{} dirname {})
-          echo "Changed folders: $CHANGED_FOLDERS"
-          echo "::set-output name=changed_folders::$CHANGED_FOLDERS"
+          CHANGED_DIRS=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | awk -F/ 'BEGIN{OFS=FS} NF--')
+          if [[ -z $CHANGED_DIRS ]]; then
+            echo "::set-output name=folder::"
+          else
+            CHANGED_FOLDER=$(echo "$CHANGED_DIRS" | awk -F/ '{print $1}' | sort -u)
+            echo "::set-output name=folder::$CHANGED_FOLDER"
+          fi
 
-      - name: Check changed folders against semver.yml
-        id: check_folders
+      # Step 2: Check if the changed folder should be considered
+      - name: Check folder with semver.yml
+        id: check_folder
         run: |
-          CHANGED_FOLDERS="${{ steps.get_changed_files.outputs.changed_folders }}"
-          SEMVER_FOLDERS=$(jq -r '.include[]' .github/semver.yml)
-          for folder in $CHANGED_FOLDERS; do
-            if [[ ! "$SEMVER_FOLDERS" =~ (^| )"$folder"($| ) ]]; then
-              echo "Folder $folder is not included in semver.yml. Aborting workflow."
+          CHANGED_FOLDER="${{ steps.changed_folder.outputs.folder }}"
+          if [[ -z $CHANGED_FOLDER ]]; then
+            echo "::set-output name=consider_folder::"
+          else
+            if grep -q "${CHANGED_FOLDER}" .github/semver.yml; then
+              echo "::set-output name=consider_folder::$CHANGED_FOLDER"
+            else
+              echo "::error::Folder $CHANGED_FOLDER should not trigger a release."
               exit 1
             fi
-          done
+          fi
 
-      # Continue with the remaining steps of your workflow here
+      # Step 3: Create git tags
+      - name: Update tag format
+        id: update_tag_format
+        run: |
+          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          if [[ -z $CONSIDER_FOLDER ]]; then
+            echo "::set-output name=tag_format::v\${version}"
+          else
+            CONSIDER_FOLDER_LOWER=$(echo "$CONSIDER_FOLDER" | awk '{print tolower($0)}')
+            echo "::set-output name=tag_format::${CONSIDER_FOLDER_LOWER}-v\${version}"
+          fi
 
+      # Step 4: Determine the path to the CHANGELOG.md file
+      - name: Determine CHANGELOG.md path
+        id: changelog_path
+        run: |
+          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          if [[ -z $CONSIDER_FOLDER ]]; then
+            echo "::set-output name=path::./CHANGELOG.md"
+          else
+            CHANGED_DIRS="${{ steps.changed_folder.outputs.folder }}"
+            while IFS= read -r dir; do
+              if [[ -f "${dir}/CHANGELOG.md" ]]; then
+                echo "::set-output name=path::${dir}/CHANGELOG.md"
+              fi
+            done <<< "$CHANGED_DIRS"
+          fi
+
+      # Step 5: Run semantic release
+      - name: Semantic Release
+        uses: docker://ghcr.io/codfish/semantic-release-action:v2
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB2 }}
+        with:
+          tag_format: '${{ steps.update_tag_format.outputs.tag_format }}'
+          additional_packages: |
+            ['@semantic-release/changelog', '@semantic-release/git']
+          plugins: |
+            [
+              '@semantic-release/commit-analyzer',
+              '@semantic-release/release-notes-generator',
+              ['@semantic-release/changelog', { changelogTitle: '# CHANGELOG', "changelogFile": "${{ steps.changelog_path.outputs.path }}" }],
+              '@semantic-release/github',
+              ['@semantic-release/git', { "assets": ["${{ steps.changelog_path.outputs.path }}"] }]
+            ]
+          branches: |
+            [
+              'master'
+            ]
+        if: steps.changelog_path.outputs.path != ''
+
+      # Step 6: Store latest release in root changelog.md file and specific changelog.md file
+      - name: Store latest release in changelog.md files
+        id: store_latest_release
+        run: |
+          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          if [[ -n $CONSIDER_FOLDER ]]; then
+            LATEST_RELEASE="$(echo "${{ steps.semantic_summary.outputs }}" | jq -r '.["release-version"]')"
+            ROOT_CHANGELOG_PATH="./CHANGELOG.md"
+            SPECIFIC_CHANGELOG_PATH="${{ steps.changelog_path.outputs.path }}"
+
+            echo -e "# Latest Release\n\n## Version ${LATEST_RELEASE}" >> "$ROOT_CHANGELOG_PATH"
+            echo -e "# Latest Release\n\n## Version ${LATEST_RELEASE}" >> "$SPECIFIC_CHANGELOG_PATH"
+          fi
+
+      - name: Semantic Release Output Summary
+        id: semantic_summary
+        run: |
+          echo "### Semantic Version = ${{ steps.semantic.outputs.release-version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ toJson(steps.semantic.outputs) }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        continue-on-error: true
 
 
         
