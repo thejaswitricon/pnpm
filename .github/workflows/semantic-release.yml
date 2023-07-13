@@ -60,13 +60,12 @@ jobs:
       - name: Update tag format
         id: update_tag_format
         run: |
-          CONSIDER_FOLDER="${{ steps.changed_dirs.outputs.consider_folder }}"
-          if [[ -z $CONSIDER_FOLDER ]]; then
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
             echo "::set-output name=tag_format::v\${version}"
           else
-            FOLDER_PATH="${CONSIDER_FOLDER/#$(git rev-parse --show-toplevel)\//}"
-            FOLDER_PATH_LOWER=$(echo "$FOLDER_PATH" | awk '{print tolower($0)}')
-            echo "::set-output name=tag_format::${FOLDER_PATH_LOWER}-v\${version}"
+            APP_NAME=$(echo "$APP_DIRS" | awk '{print tolower($0)}')
+            echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
           fi
 
       # Step 4: Determine the path to the CHANGELOG.md file
