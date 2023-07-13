@@ -1,5 +1,6 @@
 ---
-
+# Configuration for Semantic Release monorepo workflows
+scope: "@tandfgroup/terraform"
 include:
-  - modules/aws/ecs/ecs-simple/modules/*
-  - modules/aws/eks/eks-simple/modules/*
+- apps/*
+- modules/*/*/*
