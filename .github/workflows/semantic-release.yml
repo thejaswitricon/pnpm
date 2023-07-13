@@ -41,15 +41,18 @@ jobs:
           else
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             echo "SEMVER_PATTERNS: $SEMVER_PATTERNS"  # Debugging line
+            IFS=$'\n' read -rd '' -a PATTERNS <<<"$SEMVER_PATTERNS"
+            echo "PATTERNS: ${PATTERNS[*]}"  # Debugging line
             MATCHED_FOLDER=""
-            while IFS= read -r pattern; do
-              for CHANGED_FOLDER in $CHANGED_DIRS; do
-                if [[ "$CHANGED_FOLDER" == "$pattern" ]]; then
+            CHANGED_DIRS_ARRAY=($CHANGED_DIRS)  # Splitting CHANGED_DIRS into an array
+            for PATTERN in "${PATTERNS[@]}"; do
+              for CHANGED_FOLDER in "${CHANGED_DIRS_ARRAY[@]}"; do
+                if [[ "$CHANGED_FOLDER" == $PATTERN ]]; then
                   MATCHED_FOLDER=$CHANGED_FOLDER
                   break 2
                 fi
               done
-            done <<< "$SEMVER_PATTERNS"
+            done
             if [[ -n $MATCHED_FOLDER ]]; then
               ROOT_PATH=$(git rev-parse --show-toplevel)
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
@@ -59,6 +62,7 @@ jobs:
               exit 0
             fi
           fi
+
 
 
       # Step 3: Create git tags
