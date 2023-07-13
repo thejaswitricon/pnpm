@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## [1.0.16](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.15...modules/aws/ecs/ecs-simple/modules-v1.0.16) (2023-07-13)
+
+
+### Bug Fixes
+
+* **root:** initial ([ad97900](https://github.com/thejaswitricon/pnpm/commit/ad97900f8d95d7573eacbce11a7877ecce58840e))
+* **root:** initial ([279d1ca](https://github.com/thejaswitricon/pnpm/commit/279d1cadc8aa1fcff2b32a83c57f0f6dc6f39f50))
+* **root:** initial ([fbbb241](https://github.com/thejaswitricon/pnpm/commit/fbbb24158e499ae34c3b4138eaddd06a0c8c6cdc))
+* **root:** initial ([d46eb6d](https://github.com/thejaswitricon/pnpm/commit/d46eb6d39338a0d40d755dca63fb392ccaf89488))
+* **root:** initial ([570d280](https://github.com/thejaswitricon/pnpm/commit/570d280bd0ab88fedb4742fd9bf9e714a5b8a539))
+* **root:** initial ([d2c76e4](https://github.com/thejaswitricon/pnpm/commit/d2c76e4bfbcf38c59334078e6db441ae8dccf1b8))
+* **root:** initial ([7db40a8](https://github.com/thejaswitricon/pnpm/commit/7db40a823c8e15fa342630aada6ba601cc00655e))
+* **root:** initial ([e01f635](https://github.com/thejaswitricon/pnpm/commit/e01f6355e50212b06e8064b55d5a8b5784e5b76a))
+* **root:** initial ([5d80a17](https://github.com/thejaswitricon/pnpm/commit/5d80a17549f3026fb4b76cfc3954f0ee2fa6cb84))
+* **root:** initial ([4f61f3a](https://github.com/thejaswitricon/pnpm/commit/4f61f3ace3e63520891a2d26680b4c3f35048af9))
+* **root:** initial ([cf535ff](https://github.com/thejaswitricon/pnpm/commit/cf535ff8946f2b664ca9a58692d6801223acfd33))
+* **root:** initial ([8b464f6](https://github.com/thejaswitricon/pnpm/commit/8b464f61e432e87b7ef5372f65807a6025b495a7))
+* **root:** initial ([a9cc0b6](https://github.com/thejaswitricon/pnpm/commit/a9cc0b66245803b4b0b3c5495ed661e650e6b72a))
+* **root:** initial ([c03b101](https://github.com/thejaswitricon/pnpm/commit/c03b101a12d0a6d8e77a5343eb17607832d37510))
+
 ## [1.0.15](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.14...modules/aws/ecs/ecs-simple/modules-v1.0.15) (2023-07-13)
 
 
