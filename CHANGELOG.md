@@ -1,5 +1,26 @@
 # CHANGELOG
 
+## [1.0.15](https://github.com/thejaswitricon/pnpm/compare/v1.0.14...v1.0.15) (2023-07-13)
+
+
+### Bug Fixes
+
+* **root:** initial ([7dfffbf](https://github.com/thejaswitricon/pnpm/commit/7dfffbf1acead9ca4490bfbbb7a646c32cb9e717))
+* **root:** initial ([c786d87](https://github.com/thejaswitricon/pnpm/commit/c786d8787a5a4c2193b1d6760bbe4b481b7c2100))
+* **root:** initial ([c203d45](https://github.com/thejaswitricon/pnpm/commit/c203d458f6705ec4c84920e70337049e774afa70))
+* **root:** initial ([9426c9a](https://github.com/thejaswitricon/pnpm/commit/9426c9aae2c7d7335004da9f06476ee0aa64b6b5))
+* **root:** initial ([fb26298](https://github.com/thejaswitricon/pnpm/commit/fb2629873da4ba7fdc5cf58064c7f5a9856fb75f))
+* **root:** initial ([1e24fa2](https://github.com/thejaswitricon/pnpm/commit/1e24fa226055254246c5b34e480f91785b5ab773))
+* **root:** initial ([b5dadda](https://github.com/thejaswitricon/pnpm/commit/b5daddacba513108a645e65e1ae9271bb33c285e))
+* **root:** initial ([fd30b3e](https://github.com/thejaswitricon/pnpm/commit/fd30b3e37a22e07e1690c44688b8527b54613ac6))
+* **root:** initial ([1c72853](https://github.com/thejaswitricon/pnpm/commit/1c7285373e9260995b82a1b3ea3d132ed0df2748))
+* **root:** initial ([87962c8](https://github.com/thejaswitricon/pnpm/commit/87962c86d177c4287527052aa3d0beb668dabe81))
+* **root:** initial ([244dc89](https://github.com/thejaswitricon/pnpm/commit/244dc893edb1b7564e9837deadf891e9beb1f0ea))
+* **root:** initial ([7f5584a](https://github.com/thejaswitricon/pnpm/commit/7f5584a9fe1ca282be6545d289418be630e06292))
+* **root:** initial ([6bbcbd8](https://github.com/thejaswitricon/pnpm/commit/6bbcbd8eb5ac5307b7dff573b604d4cc78fb5336))
+* **root:** initial ([c4758fc](https://github.com/thejaswitricon/pnpm/commit/c4758fcecc4eb6612a604e2693bbf0a94b566838))
+* **root:** initial ([704f7f0](https://github.com/thejaswitricon/pnpm/commit/704f7f090634e9aa5fcaecab57918c9b36bb588d))
+
 ## [1.0.11](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.10...modules/aws/ecs/ecs-simple/modules-v1.0.11) (2023-07-13)
 
 
