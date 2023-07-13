@@ -39,7 +39,9 @@ jobs:
             echo "::set-output name=consider_folder::"
           else
             SEMVER_PATTERNS=$(cat .github/semver.yml)
+            echo "SEMVER_PATTERNS: $SEMVER_PATTERNS"  # Debugging line
             IFS=$'\n' read -rd '' -a PATTERNS <<<"$SEMVER_PATTERNS"
+            echo "PATTERNS: ${PATTERNS[*]}"  # Debugging line
             MATCHED_FOLDER=""
             for PATTERN in "${PATTERNS[@]}"; do
               for CHANGED_FOLDER in $CHANGED_DIRS; do
@@ -58,7 +60,6 @@ jobs:
               exit 0
             fi
           fi
-
 
       # Step 3: Create git tags
       - name: Update tag format
