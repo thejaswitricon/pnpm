@@ -34,7 +34,7 @@ jobs:
       - name: Check folder with semver.yml
         id: check_folder
         run: |
-          CHANGED_FOLDER="${{ steps.changed_folder.outputs.folder }}"
+          CHANGED_FOLDER="${{ steps.changed_dirs.outputs.folder }}"
           if [[ -z $CHANGED_FOLDER ]]; then
             echo "::set-output name=consider_folder::"
           else
@@ -60,7 +60,7 @@ jobs:
       - name: Update tag format
         id: update_tag_format
         run: |
-          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          CONSIDER_FOLDER="${{ steps.changed_dirs.outputs.consider_folder }}"
           if [[ -z $CONSIDER_FOLDER ]]; then
             echo "::set-output name=tag_format::v\${version}"
           else
@@ -73,13 +73,13 @@ jobs:
       - name: Determine CHANGELOG.md path
         id: changelog_path
         run: |
-          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          CONSIDER_FOLDER="${{ steps.changed_dirs.outputs.consider_folder }}"
           if [[ -z $CONSIDER_FOLDER ]]; then
             echo "::set-output name=path::./CHANGELOG.md"
           else
             ROOT_PATH=$(git rev-parse --show-toplevel)
             FOLDER_PATH="${CONSIDER_FOLDER/#$ROOT_PATH\//}"
-            CHANGED_DIRS="${{ steps.changed_folder.outputs.folder }}"
+            CHANGED_DIRS="${{ steps.changed_dirs.outputs.folder }}"
             while IFS= read -r dir; do
               if [[ -f "${dir}/CHANGELOG.md" ]]; then
                 echo "::set-output name=path::${dir}/CHANGELOG.md"
@@ -115,7 +115,7 @@ jobs:
       - name: Store latest release in changelog.md files
         id: store_latest_release
         run: |
-          CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
+          CONSIDER_FOLDER="${{ steps.changed_dirs.outputs.consider_folder }}"
           if [[ -n $CONSIDER_FOLDER ]]; then
             LATEST_RELEASE="$(echo "${{ steps.semantic_summary.outputs }}" | jq -r '.["release-version"]')"
             SPECIFIC_CHANGELOG_PATH="${{ steps.changelog_path.outputs.path }}"
