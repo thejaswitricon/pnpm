@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - master
-    # paths:
-    #   - 'modules/**'
+
 permissions: write-all
 
 jobs:
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -56,7 +56,6 @@ jobs:
               exit 1
             fi
           fi
-
 
       # Step 3: Create git tags
       - name: Update tag format
@@ -110,17 +109,20 @@ jobs:
             ]
         if: steps.changelog_path.outputs.path != ''
 
-      # Step 6: Store latest release in root changelog.md file and specific changelog.md file
+      # Step 6: Store latest release in changelog.md files
       - name: Store latest release in changelog.md files
         id: store_latest_release
         run: |
           CONSIDER_FOLDER="${{ steps.check_folder.outputs.consider_folder }}"
           if [[ -n $CONSIDER_FOLDER ]]; then
             LATEST_RELEASE="$(echo "${{ steps.semantic_summary.outputs }}" | jq -r '.["release-version"]')"
-            ROOT_CHANGELOG_PATH="./CHANGELOG.md"
             SPECIFIC_CHANGELOG_PATH="${{ steps.changelog_path.outputs.path }}"
 
-            echo -e "# Latest Release\n\n## Version ${LATEST_RELEASE}" >> "$ROOT_CHANGELOG_PATH"
+            # Create CHANGELOG.md file if it doesn't exist
+            if [[ ! -f "$SPECIFIC_CHANGELOG_PATH" ]]; then
+              touch "$SPECIFIC_CHANGELOG_PATH"
+            fi
+
             echo -e "# Latest Release\n\n## Version ${LATEST_RELEASE}" >> "$SPECIFIC_CHANGELOG_PATH"
           fi
 
