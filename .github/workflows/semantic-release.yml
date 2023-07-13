@@ -38,7 +38,7 @@ jobs:
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=consider_folder::"
           else
-            SEMVER_PATTERNS=$(awk 'NF' <(cat .github/semver.yml))
+            SEMVER_PATTERNS=$(awk 'NF' < .github/semver.yml)
             MATCHED_FOLDER=""
             while IFS= read -r pattern; do
               MATCH_FOUND=false
