@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## [1.0.14](https://github.com/thejaswitricon/pnpm/compare/v1.0.13...v1.0.14) (2023-07-13)
+
+
+### Bug Fixes
+
+* **root:** initial ([ed3a499](https://github.com/thejaswitricon/pnpm/commit/ed3a499c9c41f8e1e6962b7caa991c1e27eb5c12))
+* **root:** initial ([b823234](https://github.com/thejaswitricon/pnpm/commit/b82323419002d09d710e7523411a9311ccb919bc))
+* **root:** initial ([7b25616](https://github.com/thejaswitricon/pnpm/commit/7b25616461e424e6432692daf455f84cfd16064c))
+* **root:** initial ([caecb08](https://github.com/thejaswitricon/pnpm/commit/caecb08c6cea790edc7280bc25f02d6db9ba84dc))
+* **root:** initial ([e7a7998](https://github.com/thejaswitricon/pnpm/commit/e7a7998b8488d79eca82d48607cb053709489138))
+* **root:** initial ([33091f6](https://github.com/thejaswitricon/pnpm/commit/33091f6b72e8322a6649817577fbd39bfe1918de))
+* **root:** initial ([cc0f5a1](https://github.com/thejaswitricon/pnpm/commit/cc0f5a12d9d44a33d0ba002ae80f7f0c95c157df))
+* **root:** initial ([1f6075c](https://github.com/thejaswitricon/pnpm/commit/1f6075c6b6aa31a487ba44ee5643d15910361c9a))
+* **root:** initial ([d1ae82a](https://github.com/thejaswitricon/pnpm/commit/d1ae82ac104794a6a7197f48a68ca7fb556c8b69))
+* **root:** initial ([a0e9e3b](https://github.com/thejaswitricon/pnpm/commit/a0e9e3b64fea2dfe612d44b08049b7e39be8fae8))
+
 ## [1.0.9](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/modules-v1.0.8...modules/aws/ecs/ecs-simple/modules-v1.0.9) (2023-07-13)
 
 
