@@ -38,21 +38,17 @@ jobs:
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=consider_folder::"
           else
-            SEMVER_PATTERNS=$(awk 'NF' < .github/semver.yml)
+            SEMVER_PATTERNS=$(cat .github/semver.yml)
+            IFS=$'\n' read -rd '' -a PATTERNS <<<"$SEMVER_PATTERNS"
             MATCHED_FOLDER=""
-            while IFS= read -r pattern; do
-              MATCH_FOUND=false
+            for PATTERN in "${PATTERNS[@]}"; do
               for CHANGED_FOLDER in $CHANGED_DIRS; do
-                if [[ "$CHANGED_FOLDER" == "$pattern" ]]; then
+                if [[ "$CHANGED_FOLDER" == $PATTERN ]]; then
                   MATCHED_FOLDER=$CHANGED_FOLDER
-                  MATCH_FOUND=true
-                  break
+                  break 2
                 fi
               done
-              if [[ "$MATCH_FOUND" == "true" ]]; then
-                break
-              fi
-            done <<< "$SEMVER_PATTERNS"
+            done
             if [[ -n $MATCHED_FOLDER ]]; then
               ROOT_PATH=$(git rev-parse --show-toplevel)
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
