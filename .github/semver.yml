@@ -1,5 +1,5 @@
 ---
 
 include:
-  - modules/aws/ecs/ecs-simple/modules/*
-  - modules/aws/eks/eks-simple/modules/*
+  - modules/aws/ecs/ecs-simple/modules
+  - modules/aws/eks/eks-simple/modules
