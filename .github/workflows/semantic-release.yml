@@ -42,7 +42,7 @@ jobs:
             MATCHED_FOLDER=""
             while IFS= read -r pattern; do
               for CHANGED_FOLDER in $CHANGED_DIRS; do
-                if [[ "$CHANGED_FOLDER" =~ ^$pattern ]]; then
+                if [[ "$CHANGED_FOLDER" == $pattern* ]]; then
                   MATCHED_FOLDER=$CHANGED_FOLDER
                   break
                 fi
@@ -56,10 +56,11 @@ jobs:
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
               echo "::set-output name=consider_folder::$FOLDER_PATH"
             else
-              echo "::error::Folder $MATCHED_FOLDER should not trigger a release."
-              exit 1
+              echo "No matching folder found in semver.yml. Skipping release."
+              exit
             fi
           fi
+
 
       # Step 3: Create git tags
       - name: Update tag format
