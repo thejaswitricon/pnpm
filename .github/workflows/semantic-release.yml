@@ -27,18 +27,8 @@ jobs:
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=dirs::"
           else
-            GLOBSTAR_PATHS=""
-            while IFS= read -r dir; do
-              GLOBSTAR_PATH="$dir"
-              while [ -n "$GLOBSTAR_PATH" ]; do
-                GLOBSTAR_PATHS="$GLOBSTAR_PATHS$GLOBSTAR_PATH/*/"
-                GLOBSTAR_PATH=$(dirname "$GLOBSTAR_PATH")
-              done
-            done <<< "$CHANGED_DIRS"
-            GLOBSTAR_PATHS=${GLOBSTAR_PATHS::-1}  # Remove trailing slash
-            echo "::set-output name=dirs::$GLOBSTAR_PATHS"
+            echo "::set-output name=dirs::$CHANGED_DIRS"
           fi
-
 
       # Step 2: Check if the changed folder should be considered
       - name: Check folder with semver.yml
