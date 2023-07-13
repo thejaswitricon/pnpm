@@ -56,8 +56,7 @@ jobs:
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
               echo "::set-output name=consider_folder::$FOLDER_PATH"
             else
-              echo "No matching folder found in semver.yml. Skipping release."
-              exit 0
+              exit
             fi
           fi
 
