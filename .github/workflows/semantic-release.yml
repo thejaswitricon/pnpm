@@ -43,7 +43,7 @@ jobs:
             while IFS= read -r pattern; do
               MATCH_FOUND=false
               for CHANGED_FOLDER in $CHANGED_DIRS; do
-                if [[ "$CHANGED_FOLDER" == $pattern* ]]; then
+                if [[ "$CHANGED_FOLDER" == "$pattern" ]]; then
                   MATCHED_FOLDER=$CHANGED_FOLDER
                   MATCH_FOUND=true
                   break
