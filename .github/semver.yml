@@ -1,4 +1,9 @@
 ---
 
 include:
-  - modules/aws/ecs/ecs-simple/modules
+  - apps/*
+  - modules/*/*
+  - modules/aws/ecs/*
+  - modules/*/*/modules/*
+  - modules/aws/ecs/*/modules/*
+  
