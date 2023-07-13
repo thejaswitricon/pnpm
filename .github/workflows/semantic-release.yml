@@ -27,9 +27,11 @@ jobs:
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=folder::"
           else
-            CHANGED_FOLDER=$(dirname "$CHANGED_DIRS" | sort -u | awk 'BEGIN{ORS="/"} {print $0}' | sed 's/\/$//')
-            echo "::set-output name=folder::$CHANGED_FOLDER"
+            ROOT_PATH=$(git rev-parse --show-toplevel)
+            CHANGED_FOLDER=$(dirname "$CHANGED_DIRS" | sort -u | awk -v root_path="$ROOT_PATH" 'BEGIN{ORS="/"} {print $0}' | sed 's/\/$//')
+            echo "::set-output name=folder::$root_path/$CHANGED_FOLDER"
           fi
+
 
       # Step 2: Check if the changed folder should be considered
       - name: Check folder with semver.yml
