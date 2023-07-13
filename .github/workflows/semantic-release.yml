@@ -41,13 +41,15 @@ jobs:
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             MATCHED_FOLDER=""
             while IFS= read -r pattern; do
+              MATCH_FOUND=false
               for CHANGED_FOLDER in $CHANGED_DIRS; do
                 if [[ "$CHANGED_FOLDER" == $pattern* ]]; then
                   MATCHED_FOLDER=$CHANGED_FOLDER
+                  MATCH_FOUND=true
                   break
                 fi
               done
-              if [[ -n $MATCHED_FOLDER ]]; then
+              if [[ "$MATCH_FOUND" == "true" ]]; then
                 break
               fi
             done <<< "$SEMVER_PATTERNS"
@@ -56,7 +58,8 @@ jobs:
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
               echo "::set-output name=consider_folder::$FOLDER_PATH"
             else
-              exit
+              echo "No matching folder found in semver.yml. Skipping release."
+              exit 0
             fi
           fi
 
