@@ -52,7 +52,7 @@ jobs:
               if [[ "$MATCH_FOUND" == "true" ]]; then
                 break
               fi
-            done <<< "$SEMVER_PATTERNS"
+            
             if [[ -n $MATCHED_FOLDER ]]; then
               ROOT_PATH=$(git rev-parse --show-toplevel)
               FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
@@ -63,6 +63,7 @@ jobs:
             fi
             done <<< "$SEMVER_PATTERNS"
           fi
+
 
       # Step 3: Create git tags
       - name: Update tag format
