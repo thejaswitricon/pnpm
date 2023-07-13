@@ -34,7 +34,7 @@ jobs:
       - name: Check folder with semver.yml
         id: check_folder
         run: |
-          CHANGED_DIRS="modules/aws/ecs/ecs-simple/modules"
+          CHANGED_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
           echo "CHANGED_DIRS: $CHANGED_DIRS"  # Debugging line
           if [[ -z $CHANGED_DIRS ]]; then
             echo "::set-output name=consider_folder::"
