@@ -84,11 +84,11 @@ jobs:
           if [[ -z $APP_DIRS ]]; then
             echo "::set-output name=path::./CHANGELOG.md"
           else
-            while IFS= read -r dir; do
-              if [[ -f "${dir}/CHANGELOG.md" ]]; then
-                echo "::set-output name=path::${dir}/CHANGELOG.md"
-              fi
-            done <<< "$APP_DIRS"
+            CHANGELOG_PATH="${APP_DIRS}/CHANGELOG.md"
+            if [[ ! -f "$CHANGELOG_PATH" ]]; then
+              touch "$CHANGELOG_PATH"
+            fi
+            echo "::set-output name=path::$CHANGELOG_PATH"
           fi
 
       # Step 5: Run semantic release
