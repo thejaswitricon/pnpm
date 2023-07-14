@@ -80,18 +80,15 @@ jobs:
       - name: Determine CHANGELOG.md path
         id: changelog_path
         run: |
-          CONSIDER_FOLDER="${{ steps.changed_dirs.outputs.consider_folder }}"
-          if [[ -z $CONSIDER_FOLDER ]]; then
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          if [[ -z $APP_DIRS ]]; then
             echo "::set-output name=path::./CHANGELOG.md"
           else
-            ROOT_PATH=$(git rev-parse --show-toplevel)
-            FOLDER_PATH="${CONSIDER_FOLDER/#$ROOT_PATH\//}"
-            CHANGED_DIRS="${{ steps.changed_dirs.outputs.folder }}"
             while IFS= read -r dir; do
               if [[ -f "${dir}/CHANGELOG.md" ]]; then
                 echo "::set-output name=path::${dir}/CHANGELOG.md"
               fi
-            done <<< "$CHANGED_DIRS"
+            done <<< "$APP_DIRS"
           fi
 
       # Step 5: Run semantic release
