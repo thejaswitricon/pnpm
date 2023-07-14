@@ -42,8 +42,11 @@ jobs:
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             echo "SEMVER_PATTERNS: $SEMVER_PATTERNS"
             PATTERNS=()
-            while IFS= read -r PATTERN; do
-              PATTERNS+=("$PATTERN")
+            while IFS= read -r LINE; do
+              if [[ $LINE == -* ]]; then
+                FOLDER=$(echo "$LINE" | sed 's/^- //')
+                PATTERNS+=("$FOLDER")
+              fi
             done <<< "$SEMVER_PATTERNS"
             echo "PATTERNS: ${PATTERNS[*]}"
             MATCHED_FOLDER=""
