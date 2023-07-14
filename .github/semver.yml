@@ -4,4 +4,4 @@ scope: "@tandfgroup/terraform"
 include:
 - modules/*/*/*
 - modules/**/modules
-
+- module/aws/ecs/ecs-simple/modules
