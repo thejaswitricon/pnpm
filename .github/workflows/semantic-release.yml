@@ -64,7 +64,6 @@ jobs:
             fi
           fi
 
-
       # Step 3: Create git tags
       - name: Update tag format
         id: update_tag_format
