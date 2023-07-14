@@ -4,14 +4,14 @@ on:
   push:
     branches:
       - master
-
+    # paths:
+    #   - 'modules/**'
 permissions: write-all
 
 jobs:
   release:
     name: Semantic Release
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -76,7 +76,13 @@ jobs:
             echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
           fi     
 
-      # Step 4: Determine the path to the CHANGELOG.md file
+      # Step 4: Update root CHANGELOG.md with all releases
+      - name: Update root CHANGELOG.md with all releases
+        id: update_root_changelog
+        run: |
+          git log --pretty=format:'- %s' > CHANGELOG.md
+
+      # Step 5: Determine the path to the CHANGELOG.md file
       - name: Determine CHANGELOG.md path
         id: changelog_path
         run: |
@@ -91,14 +97,7 @@ jobs:
             echo "::set-output name=path::$CHANGELOG_PATH"
           fi
 
-      - name: Add new version to changelog
-        id: add_version_to_changelog
-        run: |
-          version=$(git describe --tags --abbrev=0)
-          sed -i "s~\[[0-9]\+\.[0-9]\+\.[0-9]\+\]~[${version}] $(date +'%Y-%m-%d')~" CHANGELOG.md        
-        continue-on-error: true 
-
-      # Step 5: Run semantic release
+      # Step 6: Run semantic release
       - name: Semantic Release
         uses: docker://ghcr.io/codfish/semantic-release-action:v2
         id: semantic
@@ -121,11 +120,6 @@ jobs:
               'master'
             ]
         if: steps.changelog_path.outputs.path != ''
-
-      # Step 6: Merge individual folder changelog to root changelog
-      - name: Merge changelog files
-        run: |
-          cat "${{ steps.changelog_path.outputs.path }}" >> CHANGELOG.md
 
       - name: Semantic Release Output Summary
         id: semantic_summary
