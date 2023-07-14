@@ -45,7 +45,7 @@ jobs:
             echo "PATTERNS: ${PATTERNS[*]}"
             MATCHED_FOLDER=""
             for PATTERN in "${PATTERNS[@]}"; do
-              if [[ "$CHANGED_DIRS" == $PATTERN ]]; then
+              if [[ "$CHANGED_DIRS" =~ $PATTERN ]]; then  # Use regex match operator =~
                 MATCHED_FOLDER=$CHANGED_DIRS
                 break
               fi
@@ -59,9 +59,6 @@ jobs:
               exit 0
             fi
           fi
-
-
-
 
       # Step 3: Create git tags
       - name: Update tag format
