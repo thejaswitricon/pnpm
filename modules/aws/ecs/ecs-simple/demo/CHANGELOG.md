@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [1.0.8](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/demo-v1.0.7...modules/aws/ecs/ecs-simple/demo-v1.0.8) (2023-07-14)
+
+
+### Bug Fixes
+
+* **root:** initial ([12210d0](https://github.com/thejaswitricon/pnpm/commit/12210d000bb5b04604d29d7f93efa771d9c85ac2))
+* **root:** initial ([2795d64](https://github.com/thejaswitricon/pnpm/commit/2795d647f7c914b0fabb8ccb73c970806099f011))
+* **root:** initial ([a32d7c5](https://github.com/thejaswitricon/pnpm/commit/a32d7c58b32db2916635160db1adbd96763d82fa))
+* **root:** initial ([830f86e](https://github.com/thejaswitricon/pnpm/commit/830f86eaf1115b3e51a0004ffd0c5e9bd31cdfde))
+* **root:** initial ([2192641](https://github.com/thejaswitricon/pnpm/commit/219264114039bdb4567eb31844eae6dcc2562f25))
+
 ## [1.0.7](https://github.com/thejaswitricon/pnpm/compare/modules/aws/ecs/ecs-simple/demo-v1.0.6...modules/aws/ecs/ecs-simple/demo-v1.0.7) (2023-07-14)
 
 
