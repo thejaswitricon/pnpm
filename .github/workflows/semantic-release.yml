@@ -123,6 +123,11 @@ jobs:
             ]
         if: steps.changelog_path.outputs.path != ''
 
+      # Step 6: Merge individual folder changelog to root changelog
+      - name: Merge changelog files
+        run: |
+          cat "${{ steps.changelog_path.outputs.path }}" >> CHANGELOG.md
+
       - name: Semantic Release Output Summary
         id: semantic_summary
         run: |
