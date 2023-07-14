@@ -87,8 +87,9 @@ jobs:
           releases=$(curl -s "https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases?per_page=100")
           latest_release=$(echo "$releases" | jq -r '.[0].tag_name')
           release_date=$(echo "$releases" | jq -r '.[0].published_at' | cut -d 'T' -f 1)
-          sed -i "1s/^/# ${latest_release} (${release_date})\n\n/" CHANGELOG.md
+          sed -i "1s|^|# ${latest_release} (${release_date})\n\n|" CHANGELOG.md
         continue-on-error: true 
+      
       
         
 
