@@ -41,11 +41,14 @@ jobs:
           else
             SEMVER_PATTERNS=$(cat .github/semver.yml)
             echo "SEMVER_PATTERNS: $SEMVER_PATTERNS"
-            IFS=$'\n' read -rd '' -a PATTERNS <<<"$SEMVER_PATTERNS"
+            PATTERNS=()
+            while IFS= read -r PATTERN; do
+              PATTERNS+=("$PATTERN")
+            done <<< "$SEMVER_PATTERNS"
             echo "PATTERNS: ${PATTERNS[*]}"
             MATCHED_FOLDER=""
             for PATTERN in "${PATTERNS[@]}"; do
-              if [[ $CHANGED_DIRS == $PATTERN* ]]; then  
+              if [[ $CHANGED_DIRS == $PATTERN ]]; then
                 MATCHED_FOLDER=$CHANGED_DIRS
                 break
               fi
