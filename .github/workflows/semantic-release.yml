@@ -95,7 +95,7 @@ jobs:
         id: add_version_to_changelog
         run: |
           version=$(git describe --tags --abbrev=0)
-          sed -i "s/\[[0-9]\+\.[0-9]\+\.[0-9]\+\]/[${version}] $(date +'%Y-%m-%d')/" CHANGELOG.md        
+          sed -i "s~\[[0-9]\+\.[0-9]\+\.[0-9]\+\]~[${version}] $(date +'%Y-%m-%d')~" CHANGELOG.md        
         continue-on-error: true 
 
       # Step 5: Run semantic release
