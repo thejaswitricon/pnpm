@@ -57,11 +57,11 @@ jobs:
               echo "::set-output name=consider_folder::$CHANGED_DIRS"
             else
               echo "No matching folder found in semver.yml. Skipping release."
-              exit 0
+              return
             fi
           fi
 
-          
+
       # Step 3: Create git tags
       - name: Update tag format
         id: update_tag_format
