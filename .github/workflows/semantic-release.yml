@@ -76,12 +76,15 @@ jobs:
             echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
           fi     
 
-      # Step 4: Update root CHANGELOG.md with all releases
-      - name: Update root CHANGELOG.md with all releases
+      # Step: Update root CHANGELOG.md with GitHub releases
+      - name: Update root CHANGELOG.md with GitHub releases
         id: update_root_changelog
         run: |
-          version=$(git describe --tags --abbrev=0)
-          echo "- $version" > CHANGELOG.md
+          releases=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[].tag_name')
+          for release in $releases; do
+            sed -i "1s/^/- ${release}\n/" CHANGELOG.md
+          done
+
 
 
       # Step 5: Determine the path to the CHANGELOG.md file
