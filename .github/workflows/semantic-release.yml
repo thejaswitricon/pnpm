@@ -76,6 +76,13 @@ jobs:
             echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
           fi
 
+      - name: Add new version to changelog
+        id: add_version_to_changelog
+        run: |
+          version=$(git describe --tags --abbrev=0)
+          sed -i "s/\[[0-9]\+\.[0-9]\+\.[0-9]\+\]/[${version}] $(date +'%Y-%m-%d')/" CHANGELOG.md        
+        continue-on-error: true 
+
       # Step 4: Determine the path to the CHANGELOG.md file
       - name: Determine CHANGELOG.md path
         id: changelog_path
