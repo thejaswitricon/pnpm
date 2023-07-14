@@ -54,9 +54,7 @@ jobs:
               fi
             done
             if [[ -n $MATCHED_FOLDER ]]; then
-              ROOT_PATH=$(git rev-parse --show-toplevel)
-              FOLDER_PATH="$ROOT_PATH/$MATCHED_FOLDER"
-              echo "::set-output name=consider_folder::$FOLDER_PATH"
+              echo "::set-output name=consider_folder::$CHANGED_DIRS"
             else
               echo "No matching folder found in semver.yml. Skipping release."
               exit 0
