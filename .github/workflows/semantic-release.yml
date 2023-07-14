@@ -57,7 +57,7 @@ jobs:
               echo "::set-output name=consider_folder::$CHANGED_DIRS"
             else
               echo "No matching folder found in semver.yml. Skipping release."
-              return
+              exit 0
             fi
           fi
 
