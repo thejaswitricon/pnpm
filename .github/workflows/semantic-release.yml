@@ -80,7 +80,8 @@ jobs:
       - name: Update root CHANGELOG.md with all releases
         id: update_root_changelog
         run: |
-          git log --pretty=format:'- %s' > CHANGELOG.md
+          git log --tags --pretty=format:'- %s' > CHANGELOG.md
+
 
       # Step 5: Determine the path to the CHANGELOG.md file
       - name: Determine CHANGELOG.md path
