@@ -76,16 +76,6 @@ jobs:
             echo "::set-output name=tag_format::${APP_NAME}-v\${version}"
           fi     
 
-      # Step: Update root CHANGELOG.md with GitHub releases
-      - name: Update root CHANGELOG.md with GitHub releases
-        id: update_root_changelog
-        run: |
-          releases=$(curl -s "https://api.github.com/repos/${{ github.repository }}/releases" | jq -r '.[].tag_name')
-          for release in $releases; do
-            sed -i "1s|^|- ${release}\\n|" CHANGELOG.md
-          done
-
-
       # Step 5: Determine the path to the CHANGELOG.md file
       - name: Determine CHANGELOG.md path
         id: changelog_path
@@ -125,6 +115,25 @@ jobs:
             ]
         if: steps.changelog_path.outputs.path != ''
 
+      # Step 7: Update root CHANGELOG.md with releases
+      - name: Update Root CHANGELOG.md
+        run: |
+          # Fetch all the CHANGELOG.md files from the folders
+          APP_DIRS="${{ steps.changed_dirs.outputs.dirs }}"
+          CHANGELOG_FILES=$(find $APP_DIRS -name 'CHANGELOG.md' -type f)
+
+          # Concatenate the contents of all CHANGELOG.md files into a single file
+          OUTPUT_FILE="CHANGELOG.md"
+          cat $CHANGELOG_FILES > $OUTPUT_FILE
+
+          # Commit and push the updated CHANGELOG.md file
+          git config user.name "Your Name"
+          git config user.email "your-email@example.com"
+          git add $OUTPUT_FILE
+          git commit -m "Update root CHANGELOG.md with releases"
+          git push
+
+      #Semantic release output summary
       - name: Semantic Release Output Summary
         id: semantic_summary
         run: |
